@@ -15,7 +15,7 @@ class EDDCT_Campaign_Logger {
     public function log_campaign( $payment_meta ) {
         $ga_parser = new GA_Parser();
 
-        if ( $ga_parser->cookie_parsed() ) {
+        if ( $ga_parser->cookie_present() ) {
             $campaign_info            = array();
 
             $campaign_info['source']  = trim( $ga_parser->campaign_source );

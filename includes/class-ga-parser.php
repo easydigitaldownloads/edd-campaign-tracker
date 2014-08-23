@@ -9,7 +9,7 @@
  * @since   0.1
  */
 class GA_Parser {
-    var $cookie_parsed = FALSE;
+    var $cookie_present = FALSE;
 
     var $campaign_source;    		// Campaign Source
     var $campaign_name;  			// Campaign Name
@@ -25,7 +25,7 @@ class GA_Parser {
     public function __construct() {
         if ( isset($_COOKIE["__utmz"] ) ) {
             $this->parse_cookie();
-            $this->cookie_parsed = TRUE;
+            $this->cookie_present = TRUE;
         }
     }
 
