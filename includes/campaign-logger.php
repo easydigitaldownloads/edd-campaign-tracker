@@ -12,7 +12,7 @@ class EDDCT_Campaign_Logger {
      * @param  array $payment_meta Payment Meta Information
      * @return array               Modified Payment Meta Information
      */
-    public function log_campaign( $payment_meta ) {
+    public static function log_campaign( $payment_meta ) {
         $ga_parser = new GA_Parser();
 
         if ( $ga_parser->cookie_present() ) {
@@ -23,12 +23,11 @@ class EDDCT_Campaign_Logger {
             $campaign_info['medium']  = trim( $ga_parser->campaign_medium );
             $campaign_info['term']    = trim( $ga_parser->campaign_term );
             $campaign_info['content'] = trim( $ga_parser->campaign_content );
-
             $payment_meta['eddct_campaign'] = $campaign_info;
         }
         return $payment_meta;
     }
 }
 
-add_action( 'edd_payment_meta', array( EDDCT_Campaign_Logger, 'log_campaign' ) );
+add_action( 'edd_payment_meta', array( 'EDDCT_Campaign_Logger', 'log_campaign' ) );
 ?>

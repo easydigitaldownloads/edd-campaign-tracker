@@ -12,7 +12,7 @@ class EDDCT_Payment_Screen {
 	 * @param int $payment_id Payment post ID.
      */
     public static function render_metabox( $payment_id = 0 ) {
-        self::do_meta_box( __( 'Campaign Information', 'edd-ct' ), self::show_campaign_info( $payment_id ) );
+        self::do_meta_box( __( 'Campaign Information', 'edd-ct' ), self::render_campaign_info( $payment_id ) );
     }
 
     /**
@@ -26,14 +26,10 @@ class EDDCT_Payment_Screen {
      */
     private static function do_meta_box( $title = '', $contents = '' ) {
 ?>
-        <div class="postbox-container">
-            <div id="normal-sortables" class="meta-box-sortables ui-sortable">
-                <div id="edd-order-data" class="postbox">
-                    <h3 class="hndle"><?php echo $title ?></h3>
-                    <div class="inside">
-                        <?php echo $contents; ?>
-                    </div>
-                </div>
+        <div id="edd-order-data" class="postbox">
+            <h3 class="hndle"><?php echo $title ?></h3>
+            <div class="inside">
+                <?php echo $contents; ?>
             </div>
         </div>
 <?php
@@ -42,7 +38,7 @@ class EDDCT_Payment_Screen {
     /**
      * Render Campaign Info.
      *
-     * @since 0.1
+     * @since  0.1
 	 * @param  int    $payment_id Payment post ID.
      * @return string             Campaign info
      */
@@ -54,40 +50,43 @@ class EDDCT_Payment_Screen {
 
         $payment_meta = edd_get_payment_meta( $payment_id );
         if ( isset( $payment_meta['eddct_campaign'] ) ) {
-            $campaign_info = $payment_meta['user_history'];
+            $campaign_info = $payment_meta['eddct_campaign'];
             ob_start();
 ?>
-        <h3><?php _e( 'Campaign Details', 'edd-ct');?></h3>
-        <table>
+        <table style="width: 100%; border:1px solid #eee;" border="0">
             <tr>
-                <th><?php __( 'Campaign Name', 'edd-ct' );?></th>
-                <td><?php echo empty( $campaign_info['name']) ? __( 'N/A' , 'edd-ct') : $campaign_info['name']; ?></td>
+                <th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Campaign Detail', 'edd-ct' ); ?></th>
+                <th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Value', 'edd-ct' ); ?></th>
             </tr>
             <tr>
-                <th><?php __( 'Campaign Source', 'edd-ct' );?></th>
-                <td><?php echo empty( $campaign_info['source']) ? __( 'N/A' , 'edd-ct') : $campaign_info['source']; ?></td>
+                <td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-ct' );?></td>
+                <td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['name']) ? __( 'N/A' , 'edd-ct') : $campaign_info['name']; ?></td>
+            </tr>
+            <tr style="background: #f7f7f7;">
+                <td style="text-align:left; padding:10px;"><?php _e( 'Campaign Source', 'edd-ct' );?></td>
+                <td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['source']) ? __( 'N/A' , 'edd-ct') : $campaign_info['source']; ?></td>
             </tr>
             <tr>
-                <th><?php __( 'Campaign Medium', 'edd-ct' );?></th>
-                <td><?php echo empty( $campaign_info['medium']) ? __( 'N/A' , 'edd-ct') : $campaign_info['medium']; ?></td>
+                <td style="text-align:left; padding:10px;"><?php _e( 'Campaign Medium', 'edd-ct' );?></td>
+                <td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['medium']) ? __( 'N/A' , 'edd-ct') : $campaign_info['medium']; ?></td>
+            </tr>
+            <tr style="background: #f7f7f7;">
+                <td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-ct' );?></td>
+                <td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['term']) ? __( 'N/A' , 'edd-ct') : $campaign_info['term']; ?></td>
             </tr>
             <tr>
-                <th><?php __( 'Campaign Term', 'edd-ct' );?></th>
-                <td><?php echo empty( $campaign_info['term']) ? __( 'N/A' , 'edd-ct') : $campaign_info['term']; ?></td>
-            </tr>
-            <tr>
-                <th><?php __( 'Campaign Content', 'edd-ct' );?></th>
-                <td><?php echo empty( $campaign_info['content']) ? __( 'N/A' , 'edd-ct') : $campaign_info['content']; ?></td>
+                <td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-ct' );?></td>
+                <td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['content']) ? __( 'N/A' , 'edd-ct') : $campaign_info['content']; ?></td>
             </tr>
         </table>
 <?php
             $output = ob_get_clean();
         } else {
-            $output = __( 'No Campaign Information found', 'edd-ct' );
+            $output = __( 'No campaign information available', 'edd-ct' );
         }
         return $output;
     }
 }
 
-add_action( 'edd_view_order_details_main_after', array( EDDCT_Payment_Screen, 'render_metabox' ) );
+add_action( 'edd_view_order_details_main_after', array( 'EDDCT_Payment_Screen', 'render_metabox' ) );
 ?>
