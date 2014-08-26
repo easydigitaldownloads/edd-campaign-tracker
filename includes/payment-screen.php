@@ -86,7 +86,45 @@ class EDDCT_Payment_Screen {
         }
         return $output;
     }
+
+    /**
+     * Add a new column to the payment table.
+     *
+     * @static
+     * @since  0.1
+     * @param  array $columns List of columns
+     * @return array          Modified list of columns
+     */
+    public static function add_campaign_column( $columns ) {
+        $columns['campaign'] = __( 'Campaign', 'edd-ct' );
+        return $columns;
+    }
+
+    /**
+     * Render campaign column in payment table.
+     *
+     * @static
+     * @since  0.1
+     * @param  string $value       Value for the column
+     * @param  int    $payment_id  Payment ID
+     * @param  string $column_name Name of the column
+     * @return string              Value for the column
+     */
+    public static function render_campaign_column( $value, $payment_id, $column_name ) {
+        if ( 'campaign' == $column_name ) {
+            $payment_meta = edd_get_payment_meta( $payment_id );
+            if ( isset( $payment_meta['eddct_campaign'] ) ) {
+                $campaign_info = $payment_meta['eddct_campaign'];
+                $value = $campaign_info['name'];
+            } else {
+                $value = __( 'N/A', 'edd-ct' );
+            }
+        }
+        return $value;
+    }
 }
 
 add_action( 'edd_view_order_details_main_after', array( 'EDDCT_Payment_Screen', 'render_metabox' ) );
+add_filter( 'edd_payments_table_columns', array( 'EDDCT_Payment_Screen', 'add_campaign_column' ) );
+add_filter( 'edd_payments_table_column', array( 'EDDCT_Payment_Screen', 'render_campaign_column' ), 10, 3 );
 ?>
