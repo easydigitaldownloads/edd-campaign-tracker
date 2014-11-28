@@ -15,7 +15,7 @@ Domain Path: languages/
 Check readme file for release notes
 */
 
-/*  Copyright 2014  Sudar Muthu  (email : sudar@sudarmuthu.com)
+/**  Copyright 2014  Sudar Muthu  (email : sudar@sudarmuthu.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -86,7 +86,7 @@ class EDD_Campaign_Tracker {
 	 */
 	public function licensed_updates() {
 		if ( class_exists( 'EDD_License' ) ) {
-            //$license = new EDD_License( __FILE__, 'User History', '1.5.0', 'Brian Richards' );
+            //$license = new EDD_License( __FILE__, 'Campaign Tracker', '1.0', 'Sudar Muthu' );
 		}
 	}
 
@@ -101,7 +101,7 @@ class EDD_Campaign_Tracker {
 		if ( ! $this->meets_requirements() ) {
 			// Display our error
 			echo '<div id="message" class="error">';
-			echo '<p>' . sprintf( __( 'EDD User History requires Easy Digital Downloads 2.0 or greater and has been <a href="%s">deactivated</a>.', 'edd-ct' ), admin_url( 'plugins.php' ) ) . '</p>';
+			echo '<p>' . sprintf( __( 'EDD Campaign Tracker requires Easy Digital Downloads 2.0 or greater and has been <a href="%s">deactivated</a>.', 'edd-ct' ), admin_url( 'plugins.php' ) ) . '</p>';
 			echo '</div>';
 
 			// Deactivate our plugin
