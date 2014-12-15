@@ -31,10 +31,10 @@ class EDDCT_Campaign_Logger {
             $campaign_term     = EDD()->session->get( self::get_session_id( 'term' ) );
             $campaign_content  = EDD()->session->get( self::get_session_id( 'content' ) );
 
-            if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty ( $campaign_medium ) ) {
+            if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty( $campaign_medium ) ) {
                 $campaign_info            = array();
                 $campaign_info['source']  = trim( $campaign_source );
-                $campaign_info['name']    = trim( $campaign_name );
+                $campaign_info['name']    = trim( $campaign_campaign );
                 $campaign_info['medium']  = trim( $campaign_medium );
                 $campaign_info['term']    = trim( $campaign_term );
                 $campaign_info['content'] = trim( $campaign_content );
@@ -57,7 +57,7 @@ class EDDCT_Campaign_Logger {
         $campaign_term     = isset( $_GET['utm_term'] ) ? $_GET['utm_term'] : '';
         $campaign_content  = isset( $_GET['utm_content'] ) ? $_GET['utm_content'] : '';
 
-        if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty ( $campaign_medium ) ) {
+        if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty( $campaign_medium ) ) {
             EDD()->session->set( self::get_session_id( 'source' ), filter_var( $campaign_source , FILTER_SANITIZE_STRING ) );
             EDD()->session->set( self::get_session_id( 'campaign' ), filter_var( $campaign_campaign , FILTER_SANITIZE_STRING ) );
             EDD()->session->set( self::get_session_id( 'medium' ), filter_var( $campaign_medium , FILTER_SANITIZE_STRING ) );
@@ -74,7 +74,7 @@ class EDDCT_Campaign_Logger {
      * @return string Key identifier for stored sessions
      */
     protected static function get_session_id( $type = 'campaign' ) {
-        $prefix = substr( $type, 0, 1);
+        $prefix = substr( $type, 0, 1 );
         return sprintf( 'edd_ct_%1$s_%2$sid', substr( self::get_store_id(), 0, 10 ), $prefix );
     }
 
