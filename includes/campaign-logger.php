@@ -74,8 +74,7 @@ class EDDCT_Campaign_Logger {
      * @return string Key identifier for stored sessions
      */
     protected static function get_session_id( $type = 'campaign' ) {
-        $prefix = substr( $type, 0, 1 );
-        return sprintf( 'edd_ct_%1$s_%2$sid', substr( self::get_store_id(), 0, 10 ), $prefix );
+        return sprintf( 'edd_ct_%1$s_%2$s_id', substr( self::get_store_id(), 0, 10 ), $type );
     }
 
     /**
