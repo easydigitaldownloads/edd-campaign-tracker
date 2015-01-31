@@ -7,7 +7,7 @@
  * Author: Bulk WP
  * Version: 0.1
  * Author URI: http://sudarmuthu.com/
- * Text Domain: edd-ct
+ * Text Domain: edd-campaign-tracker
  * Domain Path: languages/
  *
  * @copyright       Copyright (c) Bulk WP (email : support@bulkwp.com)
@@ -49,7 +49,7 @@ class EDD_Campaign_Tracker {
 	 * @since 0.1
 	 */
 	public function i18n() {
-		load_plugin_textdomain( 'edd-ct', false, $this->directory_path . '/languages/' );
+		load_plugin_textdomain( 'edd-campaign-tracker', false, $this->directory_path . '/languages/' );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class EDD_Campaign_Tracker {
 		if ( ! $this->meets_requirements() ) {
 			// Display our error
 			echo '<div id="message" class="error">';
-			echo '<p>' . sprintf( __( 'EDD Campaign Tracker requires Easy Digital Downloads 2.0 or greater and has been <a href="%s">deactivated</a>.', 'edd-ct' ), admin_url( 'plugins.php' ) ) . '</p>';
+			echo '<p>' . sprintf( __( 'EDD Campaign Tracker requires Easy Digital Downloads 2.0 or greater and has been <a href="%s">deactivated</a>.', 'edd-campaign-tracker' ), admin_url( 'plugins.php' ) ) . '</p>';
 			echo '</div>';
 
 			// Deactivate our plugin

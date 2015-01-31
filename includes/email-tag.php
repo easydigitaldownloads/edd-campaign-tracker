@@ -16,7 +16,7 @@ class EDDCT_Email_Tag {
 	 * @since 0.1
 	 */
 	public static function register_email_tags() {
-		edd_add_email_tag( 'campaign_info', __( 'Display Google Analytics Campaign info for this transaction', 'edd-ct' ), array( __CLASS__, 'email_tag_campaign_info' ) );
+		edd_add_email_tag( 'campaign_info', __( 'Display Google Analytics Campaign info for this transaction', 'edd-campaign-tracker' ), array( __CLASS__, 'email_tag_campaign_info' ) );
 	}
 
 	/**
@@ -27,7 +27,7 @@ class EDDCT_Email_Tag {
 	 * @return string             Content for `campaign_info` tag
 	 */
 	public static function email_tag_campaign_info( $payment_id = 0 ) {
-		$output = '<h3>' . __( 'Campaign Information', 'edd-ct' ) . '</h3>';
+		$output = '<h3>' . __( 'Campaign Information', 'edd-campaign-tracker' ) . '</h3>';
 		return $output . EDDCT_Payment_Screen::render_campaign_info( $payment_id );
 	}
 }
