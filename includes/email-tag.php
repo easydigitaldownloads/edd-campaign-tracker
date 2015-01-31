@@ -3,8 +3,13 @@
  * Helper for handling email tags.
  *
  * @since 0.1
+ * @author Bulk WP <http://bulkwp.com>
+ * @package EDD\Campaign Tracker
  */
+
+
 class EDDCT_Email_Tag {
+
 	/**
 	 * Register custom email tag.
 	 *
@@ -14,17 +19,17 @@ class EDDCT_Email_Tag {
 		edd_add_email_tag( 'campaign_info', __( 'Display Google Analytics Campaign info for this transaction', 'edd-ct' ), array( __CLASS__, 'email_tag_campaign_info' ) );
 	}
 
-    /**
-     * Callback for `campaign_info` email tag
-     *
-     * @since  0.1
-	 * @param  int    $payment_id Payment post ID.
-     * @return string             Content for `campaign_info` tag
-     */
-    public static function email_tag_campaign_info( $payment_id = 0 ) {
-        $output = '<h3>' . __( 'Campaign Information', 'edd-ct' ) . '</h3>';
-        return $output . EDDCT_Payment_Screen::render_campaign_info( $payment_id );
-    }
+	/**
+	 * Callback for `campaign_info` email tag
+	 *
+	 * @since  0.1
+	 * @param int     $payment_id (optional) Payment post ID.
+	 * @return string             Content for `campaign_info` tag
+	 */
+	public static function email_tag_campaign_info( $payment_id = 0 ) {
+		$output = '<h3>' . __( 'Campaign Information', 'edd-ct' ) . '</h3>';
+		return $output . EDDCT_Payment_Screen::render_campaign_info( $payment_id );
+	}
 }
 
 add_action( 'edd_add_email_tags', array( 'EDDCT_Email_Tag', 'register_email_tags' ) );

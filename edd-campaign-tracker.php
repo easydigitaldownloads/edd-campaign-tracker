@@ -1,35 +1,21 @@
 <?php
 /**
-Plugin Name: EDD Campaign Tracker
-Plugin URI: http://bulkwp.com
-Description: Tracks campaign and associates EDD orders with campaign
-Donate Link: http://sudarmuthu.com/if-you-wanna-thank-me
-License: GPL
-Author: Sudar
-Version: 0.1
-Author URI: http://sudarmuthu.com/
-Text Domain: edd-ct
-Domain Path: languages/
+ * Plugin Name: EDD Campaign Tracker
+ * Plugin URI: http://bulkwp.com
+ * Description: Tracks campaign and associates EDD orders with campaign
+ * License: GPL
+ * Author: Bulk WP
+ * Version: 0.1
+ * Author URI: http://sudarmuthu.com/
+ * Text Domain: edd-ct
+ * Domain Path: languages/
+ *
+ * @copyright       Copyright (c) Bulk WP (email : support@bulkwp.com)
+ * @author			Bulk WP <http://bulkwp.com>
+ * @package         EDD\Campaign Tracker
+ */
 
-=== RELEASE NOTES ===
-Check readme file for release notes
-*/
 
-/**  Copyright 2014  Sudar Muthu  (email : sudar@sudarmuthu.com)
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
 /**
  * Main Plugin class
  *
@@ -37,6 +23,7 @@ Check readme file for release notes
  * @author Sudar
  */
 class EDD_Campaign_Tracker {
+
 	/**
 	 * Start everything
 	 *
@@ -48,7 +35,7 @@ class EDD_Campaign_Tracker {
 		$this->directory_path = plugin_dir_path( __FILE__ );
 		$this->directory_url  = plugin_dir_url( __FILE__ );
 
-        $this->includes();
+		$this->includes();
 
 		// Basic setup
 		add_action( 'admin_notices', array( $this, 'maybe_disable_plugin' ) );
@@ -72,10 +59,10 @@ class EDD_Campaign_Tracker {
 	 */
 	public function includes() {
 		if ( $this->meets_requirements() ) {
-			require_once( $this->directory_path . '/includes/class-ga-parser.php' );
-			require_once( $this->directory_path . '/includes/campaign-logger.php' );
-			require_once( $this->directory_path . '/includes/payment-screen.php' );
-			require_once( $this->directory_path . '/includes/email-tag.php' );
+			require_once $this->directory_path . '/includes/class-ga-parser.php';
+			require_once $this->directory_path . '/includes/campaign-logger.php';
+			require_once $this->directory_path . '/includes/payment-screen.php';
+			require_once $this->directory_path . '/includes/email-tag.php';
 		}
 	}
 
@@ -86,7 +73,7 @@ class EDD_Campaign_Tracker {
 	 */
 	public function licensed_updates() {
 		if ( class_exists( 'EDD_License' ) ) {
-            //$license = new EDD_License( __FILE__, 'Campaign Tracker', '1.0', 'Sudar Muthu' );
+			//$license = new EDD_License( __FILE__, 'Campaign Tracker', '1.0', 'Sudar Muthu' );
 		}
 	}
 
@@ -113,14 +100,14 @@ class EDD_Campaign_Tracker {
 	 * Check if all requirements are met.
 	 *
 	 * @since 0.1
-     * @access private
+	 * @access private
 	 * @return bool True if requirements are met, otherwise false.
 	 */
 	private function meets_requirements() {
 		if ( function_exists( 'EDD' ) && defined( 'EDD_VERSION' ) && version_compare( EDD_VERSION, '2.0', '>=' ) ) {
-			return TRUE;
+			return true;
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 }
