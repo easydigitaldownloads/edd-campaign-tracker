@@ -1,0 +1,99 @@
+# Copyright (C) 2015 EDD Campaign Tracker
+# This file is distributed under the same license as the EDD Campaign Tracker package.
+msgid ""
+msgstr ""
+"Project-Id-Version: EDD Campaign Tracker 1.0.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/edd-campaign-tracker\n"
+"POT-Creation-Date: 2015-01-31 07:30:31+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/class.extension-activation.php:47
+msgid "This plugin"
+msgstr ""
+
+#: includes/class.extension-activation.php:84
+msgid "activate it"
+msgstr ""
+
+#: includes/class.extension-activation.php:87
+msgid "install it"
+msgstr ""
+
+#: includes/class.extension-activation.php:90
+msgid " requires Easy Digital Downloads! Please %s to continue!"
+msgstr ""
+
+#: includes/email-tag.php:22
+msgid "Display Google Analytics Campaign info for this transaction"
+msgstr ""
+
+#: includes/email-tag.php:33 includes/payment-screen.php:23
+msgid "Campaign Information"
+msgstr ""
+
+#: includes/payment-screen.php:65
+msgid "Campaign Detail"
+msgstr ""
+
+#: includes/payment-screen.php:65
+msgid "Value"
+msgstr ""
+
+#: includes/payment-screen.php:66
+msgid "Campaign Name"
+msgstr ""
+
+#: includes/payment-screen.php:66 includes/payment-screen.php:67
+#: includes/payment-screen.php:68 includes/payment-screen.php:69
+#: includes/payment-screen.php:70 includes/payment-screen.php:110
+msgid "N/A"
+msgstr ""
+
+#: includes/payment-screen.php:67
+msgid "Campaign Source"
+msgstr ""
+
+#: includes/payment-screen.php:68
+msgid "Campaign Medium"
+msgstr ""
+
+#: includes/payment-screen.php:69
+msgid "Campaign Term"
+msgstr ""
+
+#: includes/payment-screen.php:70
+msgid "Campaign Content"
+msgstr ""
+
+#: includes/payment-screen.php:75
+msgid "No campaign information available"
+msgstr ""
+
+#: includes/payment-screen.php:89
+msgid "Campaign"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "EDD Campaign Tracker"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://bulkwp.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Tracks campaign and associates EDD orders with campaign"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Bulk WP"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://bulkwp.com/"
+msgstr ""
