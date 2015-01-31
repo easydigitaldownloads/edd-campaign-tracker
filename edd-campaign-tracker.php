@@ -11,10 +11,13 @@
  * Domain Path: languages/
  *
  * @copyright       Copyright (c) Bulk WP (email : support@bulkwp.com)
- * @author			Bulk WP <http://bulkwp.com>
+ * @author   Bulk WP <http://bulkwp.com>
  * @package         EDD\Campaign Tracker
  */
 
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
  * Main Plugin class
