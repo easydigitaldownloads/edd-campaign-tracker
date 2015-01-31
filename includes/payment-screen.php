@@ -2,7 +2,7 @@
 /**
  * Helper class to modify payment screen.
  *
- * @since 0.1
+ * @since 1.0.0
  * @author Bulk WP <http://bulkwp.com>
  * @package EDD\Campaign Tracker
  */
@@ -16,7 +16,7 @@ class EDDCT_Payment_Screen {
 	/**
 	 * Render metabox in Payment Screen.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 * @param int     $payment_id (optional) Payment post ID.
 	 */
 	public static function render_metabox( $payment_id = 0 ) {
@@ -26,7 +26,7 @@ class EDDCT_Payment_Screen {
 	/**
 	 * Wrapper function for generating a metabox-style container on an EDD admin page.
 	 *
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @access private
 	 * @param string  $title    (optional) Metabox title.
 	 * @param string  $contents (optional) Metabox contents.
@@ -46,7 +46,7 @@ class EDDCT_Payment_Screen {
 	/**
 	 * Render Campaign Info.
 	 *
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @param int     $payment_id Payment post ID.
 	 * @return string             Campaign info
 	 */
@@ -81,7 +81,7 @@ class EDDCT_Payment_Screen {
 	 * Add a new column to the payment table.
 	 *
 	 * @static
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @param array   $columns List of columns
 	 * @return array          Modified list of columns
 	 */
@@ -94,7 +94,7 @@ class EDDCT_Payment_Screen {
 	 * Render campaign column in payment table.
 	 *
 	 * @static
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @param string  $value       Value for the column
 	 * @param int     $payment_id  Payment ID
 	 * @param string  $column_name Name of the column

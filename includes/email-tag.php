@@ -2,7 +2,7 @@
 /**
  * Helper for handling email tags.
  *
- * @since 0.1
+ * @since 1.0.0
  * @author Bulk WP <http://bulkwp.com>
  * @package EDD\Campaign Tracker
  */
@@ -16,7 +16,7 @@ class EDDCT_Email_Tag {
 	/**
 	 * Register custom email tag.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 */
 	public static function register_email_tags() {
 		edd_add_email_tag( 'campaign_info', __( 'Display Google Analytics Campaign info for this transaction', 'edd-campaign-tracker' ), array( __CLASS__, 'email_tag_campaign_info' ) );
@@ -25,7 +25,7 @@ class EDDCT_Email_Tag {
 	/**
 	 * Callback for `campaign_info` email tag
 	 *
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @param int     $payment_id (optional) Payment post ID.
 	 * @return string             Content for `campaign_info` tag
 	 */

@@ -5,8 +5,8 @@
  * Based on GA_Parse from https://github.com/joaolcorreia/Google-Analytics-PHP-cookie-parser
  *
  * @license LGPL
- * @since   0.1
- * @author  Sudar
+ * @since   1.0.0
+ * @author  Bulk WP
  * @package EDD\Campaign Tracker
  */
 
@@ -23,7 +23,7 @@ class GA_Parser {
 	/**
 	 * Setup parser.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		if ( isset( $_COOKIE['__utmz'] ) ) {
@@ -35,7 +35,7 @@ class GA_Parser {
 	/**
 	 * Returns whether the cookie was parsed.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 * @return bool True if parsed, False otherwise
 	 */
 	public function cookie_present() {
@@ -45,7 +45,7 @@ class GA_Parser {
 	/**
 	 * Parse Cookie.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 */
 	private function parse_cookie() {
 		// Parse __utmz cookie

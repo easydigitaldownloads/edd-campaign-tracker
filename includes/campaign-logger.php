@@ -2,7 +2,7 @@
 /**
  * Helper class to log campaign
  *
- * @since 0.1
+ * @since 1.0.0
  * @author Bulk WP <http://bulkwp.com>
  * @package EDD\Campaign Tracker
  */
@@ -16,7 +16,7 @@ class EDDCT_Campaign_Logger {
 	/**
 	 * Log Campaign data.
 	 *
-	 * @since  0.1
+	 * @since  1.0.0
 	 * @param array   $payment_meta Payment Meta Information
 	 * @return array               Modified Payment Meta Information
 	 */
@@ -56,7 +56,7 @@ class EDDCT_Campaign_Logger {
 	/**
 	 * Store campaign information in EDD Session.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 */
 	public static function store_campaign() {
 		$campaign_source   = isset( $_GET['utm_source'] ) ? $_GET['utm_source'] : '';
@@ -77,7 +77,7 @@ class EDDCT_Campaign_Logger {
 	/**
 	 * Returns the unique CT session keys for this EDD installation.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 * @param string  $type (optional) Type of key
 	 * @return string Key identifier for stored sessions
 	 */
@@ -88,7 +88,7 @@ class EDDCT_Campaign_Logger {
 	/**
 	 * Returns the store ID variable for use in the campaign tracking.
 	 *
-	 * @since 0.1
+	 * @since 1.0.0
 	 * @return string
 	 */
 	protected static function get_store_id() {
