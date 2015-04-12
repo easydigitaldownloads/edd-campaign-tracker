@@ -57,17 +57,21 @@ class EDDCT_Payment_Screen {
 		}
 
 		$payment_meta = edd_get_payment_meta( $payment_id );
-		if ( isset( $payment_meta['eddct_campaign'] ) ) {
-			$campaign_info = $payment_meta['eddct_campaign'];
+		if ( isset( $payment_meta['eddct_name'] ) ) {
+			$name    = $payment_meta['eddct_name'];
+			$source  = $payment_meta['eddct_source'];
+			$medium  = $payment_meta['eddct_medium'];
+			$term    = $payment_meta['eddct_term'];
+			$content = $payment_meta['eddct_content'];
 			ob_start();
 ?>
         <table style="width: 100%; border:1px solid #eee;" border="0">
             <tr><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Campaign Detail', 'edd-campaign-tracker' ); ?></th><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Value', 'edd-campaign-tracker' ); ?></th></tr>
-            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['name'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['name']; ?></td></tr>
-            <tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Source', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['source'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['source']; ?></td></tr>
-            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Medium', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['medium'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['medium']; ?></td></tr>
-            <tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['term'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['term']; ?></td></tr>
-            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['content'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['content']; ?></td></tr>
+            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $name ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $name; ?></td></tr>
+            <tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Source', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $source ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $source; ?></td></tr>
+            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Medium', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $medium ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $medium; ?></td></tr>
+            <tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $term ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $term; ?></td></tr>
+            <tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $content ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $content; ?></td></tr>
         </table>
 <?php
 			$output = ob_get_clean();
@@ -116,9 +120,8 @@ class EDDCT_Payment_Screen {
 	public static function render_campaign_column( $value, $payment_id, $column_name ) {
 		if ( 'campaign' == $column_name ) {
 			$payment_meta = edd_get_payment_meta( $payment_id );
-			if ( isset( $payment_meta['eddct_campaign'] ) ) {
-				$campaign_info = $payment_meta['eddct_campaign'];
-				$value = $campaign_info['name'];
+			if ( isset( $payment_meta['eddct_name'] ) ) {
+				$value = $payment_meta['eddct_name'];
 			} else {
 				$value = __( 'N/A', 'edd-campaign-tracker' );
 			}
