@@ -17,31 +17,37 @@ class EDDCT_Campaign_Logger {
 	 * Log Campaign data.
 	 *
 	 * @since  1.0.0
-	 * @param array  $payment_meta Payment Meta Information
+	 * @param array   $payment_meta Payment Meta Information
 	 * @return array               Modified Payment Meta Information
 	 */
 	public static function log_campaign( $payment_meta ) {
 		$ga_parser = new GA_Parser();
 
 		if ( $ga_parser->cookie_present() ) {
-			$payment_meta['eddct_name']    = trim( sanitize_text_field( $ga_parser->campaign_name ) );
-			$payment_meta['eddct_source']  = trim( sanitize_text_field( $ga_parser->campaign_source ) );
-			$payment_meta['eddct_medium']  = trim( sanitize_text_field( $ga_parser->campaign_medium ) );
-			$payment_meta['eddct_term']    = trim( sanitize_text_field( $ga_parser->campaign_term ) );
-			$payment_meta['eddct_content'] = trim( sanitize_text_field( $ga_parser->campaign_content ) );
+			$campaign_info            = array();
+			$campaign_info['source']  = trim( $ga_parser->campaign_source );
+			$campaign_info['name']    = trim( $ga_parser->campaign_name );
+			$campaign_info['medium']  = trim( $ga_parser->campaign_medium );
+			$campaign_info['term']    = trim( $ga_parser->campaign_term );
+			$campaign_info['content'] = trim( $ga_parser->campaign_content );
+
+			$payment_meta['eddct_campaign'] = $campaign_info;
 		} else {
-			$campaign_campaign = EDD()->session->get( self::get_session_id( 'campaign' ) );
 			$campaign_source   = EDD()->session->get( self::get_session_id( 'source' ) );
+			$campaign_campaign = EDD()->session->get( self::get_session_id( 'campaign' ) );
 			$campaign_medium   = EDD()->session->get( self::get_session_id( 'medium' ) );
 			$campaign_term     = EDD()->session->get( self::get_session_id( 'term' ) );
 			$campaign_content  = EDD()->session->get( self::get_session_id( 'content' ) );
 
 			if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty( $campaign_medium ) ) {
-				$payment_meta['eddct_name']    = trim( sanitize_text_field( $campaign_campaign ) );
-				$payment_meta['eddct_source']  = trim( sanitize_text_field( $campaign_source ) );
-				$payment_meta['eddct_medium']  = trim( sanitize_text_field( $campaign_medium ) );
-				$payment_meta['eddct_term']    = trim( sanitize_text_field( $campaign_term ) );
-				$payment_meta['eddct_content'] = trim( sanitize_text_field( $campaign_content ) );
+				$campaign_info            = array();
+				$campaign_info['source']  = trim( $campaign_source );
+				$campaign_info['name']    = trim( $campaign_campaign );
+				$campaign_info['medium']  = trim( $campaign_medium );
+				$campaign_info['term']    = trim( $campaign_term );
+				$campaign_info['content'] = trim( $campaign_content );
+
+				$payment_meta['eddct_campaign'] = $campaign_info;
 			}
 		}
 		return $payment_meta;
