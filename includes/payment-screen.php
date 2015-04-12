@@ -78,6 +78,19 @@ class EDDCT_Payment_Screen {
 	}
 
 	/**
+	 * Make campaign column sortable.
+	 *
+	 * @static
+	 * @since  1.0.1
+	 * @param array $columns List of sortable columns
+	 * @return array         Modified list of sortable columns
+	 */
+	public static function make_campaign_column_sortable( $columns ) {
+		$columns['campaign'] = array( 'campaign', false );
+		return $columns;
+	}
+
+	/**
 	 * Add a new column to the payment table.
 	 *
 	 * @static
@@ -116,5 +129,6 @@ class EDDCT_Payment_Screen {
 
 add_action( 'edd_view_order_details_main_after', array( 'EDDCT_Payment_Screen', 'render_metabox' ) );
 add_filter( 'edd_payments_table_columns', array( 'EDDCT_Payment_Screen', 'add_campaign_column' ) );
+add_filter( 'edd_payments_table_sortable_columns', array( 'EDDCT_Payment_Screen', 'make_campaign_column_sortable' ) );
 add_filter( 'edd_payments_table_column', array( 'EDDCT_Payment_Screen', 'render_campaign_column' ), 10, 3 );
 ?>
