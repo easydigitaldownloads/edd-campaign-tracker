@@ -118,12 +118,29 @@ class EDDCT_Payment_Screen {
 			$payment_meta = edd_get_payment_meta( $payment_id );
 			if ( isset( $payment_meta['eddct_campaign'] ) ) {
 				$campaign_info = $payment_meta['eddct_campaign'];
-				$value = $campaign_info['name'];
+				$display_name = $campaign_info['name'];
+				$value = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . $display_name . '</a>';
 			} else {
 				$value = __( 'N/A', 'edd-campaign-tracker' );
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Restrict the list of payments returned based on Campaign selected.
+	 *
+	 * @static
+	 * @since  1.0.0
+	 */
+	public static function pre_get_payments( $payment_query ) {
+		if ( isset( $_GET['campaign'] ) ) {
+			$campaign = sanitize_text_field( urldecode( $_GET['campaign'] ) );
+			$payment_query->__set( 'meta_query', array(
+				'key'   => '_eddct_campaign_name',
+				'value' => $campaign,
+			) );
+		}
 	}
 }
 
@@ -131,4 +148,5 @@ add_action( 'edd_view_order_details_main_after', array( 'EDDCT_Payment_Screen', 
 add_filter( 'edd_payments_table_columns', array( 'EDDCT_Payment_Screen', 'add_campaign_column' ) );
 add_filter( 'edd_payments_table_sortable_columns', array( 'EDDCT_Payment_Screen', 'make_campaign_column_sortable' ) );
 add_filter( 'edd_payments_table_column', array( 'EDDCT_Payment_Screen', 'render_campaign_column' ), 10, 3 );
+add_action( 'edd_pre_get_payments', array( 'EDDCT_Payment_Screen', 'pre_get_payments' ) );
 ?>

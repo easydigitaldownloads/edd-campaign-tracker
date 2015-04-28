@@ -21,9 +21,9 @@ class EDDCT_Campaign_Logger {
 	 */
 	public static function log_campaign( $payment_meta ) {
 		$ga_parser = new GA_Parser();
+		$campaign_info = array();
 
 		if ( $ga_parser->cookie_present() ) {
-			$campaign_info            = array();
 			$campaign_info['source']  = trim( $ga_parser->campaign_source );
 			$campaign_info['name']    = trim( $ga_parser->campaign_name );
 			$campaign_info['medium']  = trim( $ga_parser->campaign_medium );
@@ -39,7 +39,6 @@ class EDDCT_Campaign_Logger {
 			$campaign_content  = EDD()->session->get( self::get_session_id( 'content' ) );
 
 			if ( ! empty( $campaign_source ) && ! empty( $campaign_campaign ) && ! empty( $campaign_medium ) ) {
-				$campaign_info            = array();
 				$campaign_info['source']  = trim( $campaign_source );
 				$campaign_info['name']    = trim( $campaign_campaign );
 				$campaign_info['medium']  = trim( $campaign_medium );
@@ -50,6 +49,24 @@ class EDDCT_Campaign_Logger {
 			}
 		}
 		return $payment_meta;
+	}
+
+	/**
+	 * Log campaign name.
+	 * We need to log campaign name separately since we need to filter payments based on the name.
+	 *
+	 * @param int $payment_id Payment id
+	 * @param array $payment_data Payment Data
+	 */
+	public static function log_campaign_name( $payment_id, $payment_data ) {
+		$payment_meta = edd_get_payment_meta( $payment_id );
+		if ( array_key_exists( 'eddct_campaign', $payment_meta ) ) {
+			$campaign_info = $payment_meta['eddct_campaign'];
+
+			if ( isset( $campaign_info['name'] ) ) {
+				update_post_meta( $payment_id, '_eddct_campaign_name', $campaign_info['name'] );
+			}
+		}
 	}
 
 	/**
@@ -97,4 +114,5 @@ class EDDCT_Campaign_Logger {
 
 add_action( 'init', array( 'EDDCT_Campaign_Logger', 'store_campaign' ) );
 add_action( 'edd_payment_meta', array( 'EDDCT_Campaign_Logger', 'log_campaign' ) );
+add_action( 'edd_insert_payment', array( 'EDDCT_Campaign_Logger', 'log_campaign_name' ), 10, 2 );
 ?>
