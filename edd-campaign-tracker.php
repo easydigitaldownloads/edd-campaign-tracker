@@ -10,14 +10,13 @@
  * Text Domain: edd-campaign-tracker
  * Domain Path: languages/
  *
- * @copyright       Copyright (c) Bulk WP (email : support@bulkwp.com)
- * @author   Bulk WP <http://bulkwp.com>
- * @package         EDD\Campaign Tracker
+ * @copyright Copyright (c) Bulk WP (email : support@bulkwp.com)
+ * @author    Bulk WP <http://bulkwp.com>
+ * @package   EDD\CampaignTracker
  */
 
-
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Main Plugin class

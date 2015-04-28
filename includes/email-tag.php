@@ -4,12 +4,11 @@
  *
  * @since 1.0.0
  * @author Bulk WP <http://bulkwp.com>
- * @package EDD\Campaign Tracker
+ * @package EDD\CampaignTracker
  */
 
-
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) { exit; }
+defined( 'ABSPATH' ) || exit;
 
 class EDDCT_Email_Tag {
 
