@@ -5,7 +5,7 @@
  * Description: Tracks Google campaign data and associates EDD orders with campaign data.
  * License: GPL
  * Author: Bulk WP
- * Version: 1.0.0
+ * Version: 1.0.0-beta2
  * Author URI: http://bulkwp.com/
  * Text Domain: edd-campaign-tracker
  * Domain Path: languages/
