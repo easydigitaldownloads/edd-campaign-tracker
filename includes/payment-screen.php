@@ -142,6 +142,46 @@ class EDDCT_Payment_Screen {
 			) );
 		}
 	}
+
+	/**
+	 * Modify the `join` used for calculating the payment count.
+	 *
+	 * @static
+	 * @since 1.0.0
+	 */
+	public static function count_payments_join( $join ) {
+		global $wpdb;
+
+		if ( isset( $_GET['campaign'] ) ) {
+			$campaign = urldecode( sanitize_text_field( $_GET['campaign'] ) );
+			if ( '' != $campaign ) {
+				$join = "LEFT JOIN $wpdb->postmeta m ON (p.ID = m.post_id)";
+			}
+		}
+
+		return $join;
+	}
+
+	/**
+	 * Modify the `where` used for calculating the payment count.
+	 *
+	 * @static
+	 * @since 1.0.0
+	 */
+	public static function count_payments_where( $where ) {
+		global $wpdb;
+
+		if ( isset( $_GET['campaign'] ) ) {
+			$campaign = urldecode( sanitize_text_field( $_GET['campaign'] ) );
+			if ( '' != $campaign ) {
+				$where .= "
+				AND m.meta_key = '_eddct_campaign_name'
+				AND m.meta_value = '{$campaign}'";
+			}
+		}
+
+		return $where;
+	}
 }
 
 add_action( 'edd_view_order_details_main_after', array( 'EDDCT_Payment_Screen', 'render_metabox' ) );
@@ -149,4 +189,11 @@ add_filter( 'edd_payments_table_columns', array( 'EDDCT_Payment_Screen', 'add_ca
 add_filter( 'edd_payments_table_sortable_columns', array( 'EDDCT_Payment_Screen', 'make_campaign_column_sortable' ) );
 add_filter( 'edd_payments_table_column', array( 'EDDCT_Payment_Screen', 'render_campaign_column' ), 10, 3 );
 add_action( 'edd_pre_get_payments', array( 'EDDCT_Payment_Screen', 'pre_get_payments' ) );
+
+// `edd_count_payments_join` was introduced only in https://github.com/easydigitaldownloads/Easy-Digital-Downloads/pull/3352
+// If the `where` clause is modified without `join` clause then it will result in a SQL error.
+if ( version_compare( EDD_VERSION, '2.4', '>=') ) {
+	add_filter( 'edd_count_payments_where', array( 'EDDCT_Payment_Screen', 'count_payments_where' ) );
+	add_filter( 'edd_count_payments_join', array( 'EDDCT_Payment_Screen', 'count_payments_join' ) );
+}
 ?>
