@@ -192,7 +192,7 @@ add_action( 'edd_pre_get_payments', array( 'EDDCT_Payment_Screen', 'pre_get_paym
 
 // `edd_count_payments_join` was introduced only in https://github.com/easydigitaldownloads/Easy-Digital-Downloads/pull/3352
 // If the `where` clause is modified without `join` clause then it will result in a SQL error.
-if ( version_compare( EDD_VERSION, '2.4', '>=') ) {
+if ( version_compare( EDD_VERSION, '2.3.9', '>=') ) {
 	add_filter( 'edd_count_payments_where', array( 'EDDCT_Payment_Screen', 'count_payments_where' ) );
 	add_filter( 'edd_count_payments_join', array( 'EDDCT_Payment_Screen', 'count_payments_join' ) );
 }
