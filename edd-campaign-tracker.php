@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: EDD Campaign Tracker
+ * Plugin Name: Easy Digital Downloads - Campaign Tracker
  * Plugin URI: http://bulkwp.com
  * Description: Tracks Google campaign data and associates EDD orders with campaign data.
  * License: GPL
