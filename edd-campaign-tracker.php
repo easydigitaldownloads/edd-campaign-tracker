@@ -159,4 +159,3 @@ function EDD_Campaign_Tracker_load() {
 }
 
 add_action( 'plugins_loaded', 'EDD_Campaign_Tracker_load' );
-?>

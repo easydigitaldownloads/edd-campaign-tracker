@@ -115,4 +115,3 @@ class EDDCT_Campaign_Logger {
 add_action( 'init', array( 'EDDCT_Campaign_Logger', 'store_campaign' ) );
 add_action( 'edd_payment_meta', array( 'EDDCT_Campaign_Logger', 'log_campaign' ) );
 add_action( 'edd_insert_payment', array( 'EDDCT_Campaign_Logger', 'log_campaign_name' ), 10, 2 );
-?>

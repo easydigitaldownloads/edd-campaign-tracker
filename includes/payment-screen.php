@@ -196,4 +196,3 @@ if ( version_compare( EDD_VERSION, '2.3.9', '>=') ) {
 	add_filter( 'edd_count_payments_where', array( 'EDDCT_Payment_Screen', 'count_payments_where' ) );
 	add_filter( 'edd_count_payments_join', array( 'EDDCT_Payment_Screen', 'count_payments_join' ) );
 }
-?>

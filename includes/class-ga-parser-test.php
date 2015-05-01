@@ -16,4 +16,3 @@ if ( $ga_parser->cookie_present() ) {
 } else {
 	echo "Cookie not found";
 }
-?>

@@ -35,4 +35,3 @@ class EDDCT_Email_Tag {
 }
 
 add_action( 'edd_add_email_tags', array( 'EDDCT_Email_Tag', 'register_email_tags' ) );
-?>
