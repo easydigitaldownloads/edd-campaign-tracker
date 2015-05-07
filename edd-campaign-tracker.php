@@ -82,6 +82,7 @@ class EDD_Campaign_Tracker {
 		require_once EDD_CAMPAIGN_TRACKER_DIR . '/includes/campaign-logger.php';
 		require_once EDD_CAMPAIGN_TRACKER_DIR . '/includes/payment-screen.php';
 		require_once EDD_CAMPAIGN_TRACKER_DIR . '/includes/email-tag.php';
+		require_once EDD_CAMPAIGN_TRACKER_DIR . '/includes/reports.php';
 	}
 
 	/**
