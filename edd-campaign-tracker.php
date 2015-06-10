@@ -153,7 +153,6 @@ function EDD_Campaign_Tracker_load() {
 
 		$activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
 		$activation = $activation->run();
-		return EDD_Campaign_Tracker::instance();
 	} else {
 		return EDD_Campaign_Tracker::instance();
 	}
