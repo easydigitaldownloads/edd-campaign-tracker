@@ -56,12 +56,12 @@ class EDDCT_Reports {
 	/**
 	 * Add Campaign to the views dropdown in reports page.
 	 *
-	 * @since 1.0.0
-	 * @param unknown $views
-	 * @return unknown
+	 * @since  1.0.0
+	 * @param  array $views List of views
+	 * @return array        Filtered set of views
 	 */
 	public function add_campaign_view( $views ) {
-		$views['campaign'] = __( 'Campaign', 'edd-campaign-tracker' );
+		$views['campaign'] = __( 'Campaigns', 'edd-campaign-tracker' );
 		return $views;
 	}
 
