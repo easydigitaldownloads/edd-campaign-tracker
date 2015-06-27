@@ -1,6 +1,6 @@
 <?php
 /**
- * Campaing Reports.
+ * Campaign Reports.
  *
  * @since 1.0.0
  * @author Bulk WP <http://bulkwp.com>
@@ -29,7 +29,7 @@ class EDDCT_Reports {
 	 *
 	 * @static
 	 * @since 1.0.0
-	 * @return unknown
+	 * @return object Instance of the class
 	 */
 	public static function factory() {
 		static $instance = false;
@@ -90,7 +90,7 @@ class EDDCT_Reports {
 	 * @return void
 	 */
 	protected function render_campaign_graph() {
-		$campaign = isset( $_GET['campaign' ] ) ? sanitize_text_field( $_GET['campaign'] ) : null;
+		$campaign = isset( $_GET['campaign'] ) ? sanitize_text_field( $_GET['campaign'] ) : null;
 
 		// Retrieve the queried dates
 		$dates = edd_get_report_dates();
@@ -297,9 +297,9 @@ class EDDCT_Reports {
 		) );
 
 		$dates            = edd_get_report_dates();
-		$display          = $dates['range'] == 'other' ? '' : 'style="display:none;"';
+		$display          = 'other' == $dates['range'] ? '' : 'style="display:none;"';
 		$view             = edd_get_reporting_view();
-		$current_campaign = isset( $_GET['campaign' ] ) ? sanitize_text_field( $_GET['campaign'] ) : null;
+		$current_campaign = isset( $_GET['campaign'] ) ? sanitize_text_field( $_GET['campaign'] ) : null;
 
 		if ( empty( $dates['day_end'] ) ) {
 			$dates['day_end'] = cal_days_in_month( CAL_GREGORIAN, date( 'n' ), date( 'Y' ) );
@@ -456,11 +456,13 @@ class EDDCT_Reports {
 			$args['meta_compare'] = 'EXISTS';
 		}
 
-		if ( ! empty( $day ) )
+		if ( ! empty( $day ) ) {
 			$args['day'] = $day;
+		}
 
-		if ( ! empty( $hour ) )
+		if ( ! empty( $hour ) ) {
 			$args['hour'] = $hour;
+		}
 
 		$args     = apply_filters( 'eddct_get_earnings_by_date_args', $args );
 		$key      = md5( serialize( $args ) );
@@ -475,7 +477,7 @@ class EDDCT_Reports {
 
 			}
 			// Cache the results for one hour
-			set_transient( $key, $earnings, 60*60 );
+			set_transient( $key, $earnings, 3600 );
 		}
 
 		return round( $earnings, 2 );
@@ -514,16 +516,19 @@ class EDDCT_Reports {
 			$args['meta_compare'] = 'EXISTS';
 		}
 
-		if ( ! empty( $month_num ) )
+		if ( ! empty( $month_num ) ) {
 			$args['monthnum'] = $month_num;
+		}
 
-		if ( ! empty( $day ) )
+		if ( ! empty( $day ) ) {
 			$args['day'] = $day;
+		}
 
-		if ( ! empty( $hour ) )
+		if ( ! empty( $hour ) ) {
 			$args['hour'] = $hour;
+		}
 
-		$args = apply_filters( 'eddct_get_sales_by_date_args', $args  );
+		$args = apply_filters( 'eddct_get_sales_by_date_args', $args );
 
 		$key   = md5( serialize( $args ) );
 		$count = get_transient( $key, 'edd' );
@@ -532,7 +537,7 @@ class EDDCT_Reports {
 			$sales = new WP_Query( $args );
 			$count = (int) $sales->post_count;
 			// Cache the results for one hour
-			set_transient( $key, $count, 60*60 );
+			set_transient( $key, $count, 3600 );
 		}
 
 		return $count;

@@ -26,7 +26,6 @@ defined( 'ABSPATH' ) || exit;
 class EDD_Campaign_Tracker {
 
 	/**
-	 *
 	 * @var         EDD_Campaign_Tracker $instance The one true EDD_Campaign_Tracker
 	 * @since       1.0.0
 	 */
