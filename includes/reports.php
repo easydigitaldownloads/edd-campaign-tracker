@@ -326,7 +326,7 @@ class EDDCT_Reports {
 					</select>
 					<?php $campaigns = $this->get_campaign_list(); ?>
 					<select id="eddct-campaign-name" name="campaign">
-						<option value="" selected><?php _e( 'All', 'edd-campaign-tracker' ); ?></option>
+						<option value="" selected><?php _e( 'All Campaigns', 'edd-campaign-tracker' ); ?></option>
 						<?php foreach ( $campaigns as $campaign ) {
 							if ( null != $campaign ) {
 								printf( '<option value="%s" %s>%s</option>', esc_attr( $campaign ), selected( $current_campaign, $campaign, false ), $campaign );
@@ -448,9 +448,12 @@ class EDDCT_Reports {
 			'update_post_term_cache' => false,
 		);
 
-		if ( null != $campaign ) {
-			$args['meta_key']   = '_eddct_campaign_name';
-			$args['meta_value'] = $campaign;
+		if ( ! empty( $campaign ) ) {
+			$args['meta_key']     = '_eddct_campaign_name';
+			$args['meta_value']   = $campaign;
+		} else {
+			$args['meta_key']     = '_eddct_campaign_name';
+			$args['meta_compare'] = 'EXISTS';
 		}
 
 		if ( ! empty( $day ) )
@@ -503,9 +506,12 @@ class EDDCT_Reports {
 			'update_post_term_cache' => false,
 		);
 
-		if ( null != $campaign ) {
-			$args['meta_key']   = '_eddct_campaign_name';
-			$args['meta_value'] = $campaign;
+		if ( ! empty( $campaign ) ) {
+			$args['meta_key']     = '_eddct_campaign_name';
+			$args['meta_value']   = $campaign;
+		} else {
+			$args['meta_key']     = '_eddct_campaign_name';
+			$args['meta_compare'] = 'EXISTS';
 		}
 
 		if ( ! empty( $month_num ) )
