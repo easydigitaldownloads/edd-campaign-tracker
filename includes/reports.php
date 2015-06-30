@@ -248,18 +248,9 @@ class EDDCT_Reports {
 		$graph->set( 'x_mode', 'time' );
 		$graph->set( 'multiple_y_axes', true );
 		$graph->display();
-
-		if ( 'this_month' == $dates['range'] ) {
-			$estimated = edd_estimated_monthly_stats();
-		}
 ?>
 						<p class="edd_graph_totals"><strong><?php _e( 'Total earnings for period shown: ', 'edd-campaign-tracker' ); echo edd_currency_filter( edd_format_amount( $earnings_totals ) ); ?></strong></p>
 						<p class="edd_graph_totals"><strong><?php _e( 'Total sales for period shown: ', 'edd-campaign-tracker' ); echo edd_format_amount( $sales_totals, false ); ?></strong></p>
-
-						<?php if ( 'this_month' == $dates['range'] ) : ?>
-							<p class="edd_graph_totals"><strong><?php _e( 'Estimated monthly earnings: ', 'edd-campaign-tracker' ); echo edd_currency_filter( edd_format_amount( $estimated['earnings'] ) ); ?></strong></p>
-							<p class="edd_graph_totals"><strong><?php _e( 'Estimated monthly sales: ', 'edd-campaign-tracker' ); echo edd_format_amount( $estimated['sales'], false ); ?></strong></p>
-						<?php endif; ?>
 
 						<?php do_action( 'edd_reports_graph_additional_stats' ); ?>
 
