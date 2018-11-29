@@ -52,21 +52,21 @@ class GA_Parser {
 		list( $domain_hash, $timestamp, $session_number, $campaign_numer, $campaign_data ) = preg_split( '[\.]', $_COOKIE['__utmz'], 5 );
 
 		// Parse the campaign data
-		$campaign_data = parse_str( strtr( $campaign_data, '|', '&' ) );
+		parse_str( strtr( $campaign_data, '|', '&' ), $campaign_data );
 
-		$this->campaign_source  = isset( $utmcsr ) ? $utmcsr : null;
-		$this->campaign_name    = isset( $utmccn ) ? $utmccn : null;
-		$this->campaign_medium  = isset( $utmcmd ) ? $utmcmd : null;
-		$this->campaign_term    = isset( $utmctr ) ? $utmctr : null;
-		$this->campaign_content = isset( $utmcct ) ? $utmcct : null;
+		$this->campaign_source  = isset( $campaign_data['utmcsr'] ) ? $campaign_data['utmcsr'] : null;
+		$this->campaign_name    = isset( $campaign_data['utmccn'] ) ? $campaign_data['utmccn'] : null;
+		$this->campaign_medium  = isset( $campaign_data['utmcmd'] ) ? $campaign_data['utmcmd'] : null;
+		$this->campaign_term    = isset( $campaign_data['utmctr'] ) ? $campaign_data['utmctr'] : null;
+		$this->campaign_content = isset( $campaign_data['utmcct'] ) ? $campaign_data['utmcct'] : null;
 
 		// adwords
-		if ( isset( $utmgclid ) ) {
+		if ( isset( $campaign_data['utmgclid'] ) ) {
 			$this->campaign_source  = 'google';
 			$this->campaign_name    = '';
 			$this->campaign_medium  = 'cpc';
 			$this->campaign_content = '';
-			$this->campaign_term    = $utmctr;
+			$this->campaign_term    = $campaign_data['utmctr'];
 		}
 	}
 }
