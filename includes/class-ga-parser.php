@@ -6,7 +6,7 @@
  *
  * @license LGPL
  * @since   1.0.0
- * @author  Bulk WP
+ * @author  Sandhills Development, LLC
  * @package EDD\Campaign Tracker
  */
 

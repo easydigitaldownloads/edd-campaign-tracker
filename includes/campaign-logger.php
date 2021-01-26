@@ -3,7 +3,7 @@
  * Helper class to log campaign
  *
  * @since 1.0.0
- * @author Bulk WP <http://bulkwp.com>
+ * @author Sandhills Development, LLC
  * @package EDD\CampaignTracker
  */
 

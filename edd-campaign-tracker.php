@@ -1,17 +1,17 @@
 <?php
 /**
  * Plugin Name: Easy Digital Downloads - Campaign Tracker
- * Plugin URI: http://bulkwp.com
+ * Plugin URI: https://easydigitaldownloads.com/downloads/campaign-tracker/
  * Description: Tracks Google campaign data and associates EDD orders with campaign data.
  * License: GPL
- * Author: Bulk WP
+ * Author: Sandhills Development, LLC
  * Version: 1.0.0
- * Author URI: http://bulkwp.com/
+ * Author URI: http://sandhillsdev.com/
  * Text Domain: edd-campaign-tracker
  * Domain Path: languages/
  *
- * @copyright Copyright (c) Bulk WP (email : support@bulkwp.com)
- * @author    Bulk WP <http://bulkwp.com>
+ * @copyright Copyright (c) Sandhills Development, LLC
+ * @author    Sandhills Development, LLC
  * @package   EDD\CampaignTracker
  */
 
@@ -132,7 +132,7 @@ class EDD_Campaign_Tracker {
 	 */
 	public function licensed_updates() {
 		if ( class_exists( 'EDD_License' ) ) {
-			$license = new EDD_License( __FILE__, 'Campaign Tracker', EDD_CAMPAIGN_TRACKER_VER, 'Bulk WP' );
+			$license = new EDD_License( __FILE__, 'Campaign Tracker', EDD_CAMPAIGN_TRACKER_VER, 'Sandhills Development, LLC', null, null, 564404 );
 		}
 	}
 }
