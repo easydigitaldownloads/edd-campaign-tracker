@@ -263,28 +263,28 @@ class EDDCT_Reports {
 				$amount[ $timestamp ][0] = $timestamp;
 				$amount[ $timestamp ][1] = 0.00;
 
-				// Loop through each date there were renewals, which we queried from the database.
+				// Loop through each date there were results, which we queried from the database.
 				foreach ( $results as $result ) {
 
 					$timezone         = new DateTimeZone( 'UTC' );
 					$date_of_db_value = new DateTime( $result->date, $timezone );
 					$date_on_chart    = new DateTime( $dates['start'], $timezone );
 
-					// Add any renewals that happened during this hour.
+					// Add any results that happened during this hour.
 					if ( $hour_by_hour ) {
 						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
 						if ( $date_of_db_value->format( 'Y-m-d H' ) === $date_on_chart->format( 'Y-m-d H' ) ) {
 							$number[ $timestamp ][1] += $result->number;
 							$amount[ $timestamp ][1] += abs( $result->amount );
 						}
-						// Add any renewals that happened during this day.
+						// Add any results that happened during this day.
 					} elseif ( $day_by_day ) {
 						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
 						if ( $date_of_db_value->format( 'Y-m-d' ) === $date_on_chart->format( 'Y-m-d' ) ) {
 							$number[ $timestamp ][1] += $result->number;
 							$amount[ $timestamp ][1] += abs( $result->amount );
 						}
-						// Add any renewals that happened during this month.
+						// Add any results that happened during this month.
 					} else {
 						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
 						if ( $date_of_db_value->format( 'Y-m' ) === $date_on_chart->format( 'Y-m' ) ) {
