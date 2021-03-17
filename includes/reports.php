@@ -636,13 +636,22 @@ class EDDCT_Reports {
 	protected function get_campaign_list() {
 		global $wpdb;
 
-		$campaigns = $wpdb->get_col( $wpdb->prepare( "
-			SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
-			LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-			WHERE pm.meta_key = '%s'
-			AND p.post_status = '%s'
-			AND p.post_type = '%s'
-		", '_eddct_campaign_name', 'publish', 'edd_payment' ) );
+		if ( function_exists( 'edd_get_orders' ) ) {
+			$campaigns = $wpdb->get_col(
+		"SELECT DISTINCT ometa.meta_value FROM {$wpdb->edd_ordermeta} ometa
+				LEFT JOIN {$wpdb->edd_orders} o ON( o.id = ometa.edd_order_id )
+				WHERE ometa.meta_key = '_eddct_campaign_name'
+				AND o.status IN( 'complete', 'revoked' )"
+			);
+		} else {
+			$campaigns = $wpdb->get_col( $wpdb->prepare( "
+				SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+				LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+				WHERE pm.meta_key = '%s'
+				AND p.post_status = '%s'
+				AND p.post_type = '%s'
+			", '_eddct_campaign_name', 'publish', 'edd_payment' ) );
+		}
 
 		asort( $campaigns );
 		return $campaigns;
