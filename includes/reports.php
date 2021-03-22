@@ -8,6 +8,7 @@
  */
 
 use EDD\Reports\Data\Report_Registry;
+use function EDD\Reports\get_filter_value;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 
@@ -49,12 +50,65 @@ class EDDCT_Reports {
 	 */
 	protected function setup_hooks() {
 		if ( function_exists( 'edd_get_orders' ) ) {
+			add_filter( 'edd_report_filters', array( $this, 'add_campaign_filter' ) );
 			add_action( 'edd_reports_init', array( $this, 'register_reports' ) );
 		} else {
 			add_filter( 'edd_report_views', array( $this, 'add_campaign_view' ) );
 			add_action( 'edd_reports_view_campaign', array( $this, 'render_campaign_earnings' ) );
 			add_action( 'edd_filter_campaign_reports', array( $this, 'parse_report_dates' ) );
 		}
+	}
+
+	/**
+	 * Adds a new report filter for "Campaign".
+	 *
+	 * @param array $filters
+	 *
+	 * @since 1.0.1
+	 * @return array
+	 */
+	public function add_campaign_filter( $filters ) {
+		$filters['campaign_tracker'] = array(
+			'label'            => __( 'Campaign', 'edd-campaign-tracker' ),
+			'display_callback' => array( $this, 'display_campaign_filter' )
+		);
+
+		return $filters;
+	}
+
+	/**
+	 * Displays the campaign filter.
+	 *
+	 * @since 1.0.1
+	 * @return void
+	 */
+	public function display_campaign_filter() {
+		$campaigns = $this->get_campaign_list();
+
+		if ( empty( $campaigns ) ) {
+			return;
+		}
+
+		$campaigns = array_combine( $campaigns, $campaigns );
+		natsort( $campaigns );
+		?>
+		<span class="edd-graph-filter-options graph-option-section">
+			<label for="edd-campaign-tracker-filter" class="screen-reader-text">
+				<?php esc_html_e( 'Filter by campaign', 'edd-campaign-tracker' ); ?>
+			</label>
+			<?php
+			echo EDD()->html->select( array(
+				'options'          => $campaigns,
+				'name'             => 'campaign_tracker',
+				'id'               => 'edd-campaign-tracker-filter',
+				'selected'         => get_filter_value( 'campaign_tracker' ),
+				'show_option_all'  => __( 'All Campaigns', 'edd-campaign-tracker' ),
+				'show_option_none' => false,
+				'chosen'           => true
+			) );
+			?>
+		</span>
+		<?php
 	}
 
 	/**
@@ -71,7 +125,7 @@ class EDDCT_Reports {
 				'label'     => __( 'Campaigns', 'edd-campaign-tracker' ),
 				'icon'      => 'share',
 				'priority'  => 50,
-				'filters'   => array( 'dates' ), // @todo campaign dropdown
+				'filters'   => array( 'dates', 'campaign_tracker' ),
 				'endpoints' => array(
 					'tiles' => array(
 						'campaign_tracker_earnings',
@@ -157,10 +211,10 @@ class EDDCT_Reports {
 	private function get_campaign_condition() {
 		global $wpdb;
 
-		$campaign = EDD\Reports\get_filter_value( 'campaign' );
+		$campaign = EDD\Reports\get_filter_value( 'campaign_tracker' );
 
 		$campaign_condition = "AND meta_key = '_eddct_campaign_name'";
-		if ( $campaign ) {
+		if ( $campaign && 'all' !== $campaign ) {
 			$campaign_condition .= $wpdb->prepare( " AND meta_value = %s", $campaign );
 		}
 
