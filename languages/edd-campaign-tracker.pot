@@ -83,7 +83,7 @@ msgid "EDD Campaign Tracker"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "http://bulkwp.com"
+msgid "https://easydigitaldownloads.com/downloads/campaign-tracker/"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -91,9 +91,9 @@ msgid "Tracks campaign and associates EDD orders with campaign"
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Bulk WP"
+msgid "Sandhills Development, LLC"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://bulkwp.com/"
+msgid "https://easydigitaldownloads.com/downloads/campaign-tracker/"
 msgstr ""

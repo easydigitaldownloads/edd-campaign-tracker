@@ -1,13 +1,13 @@
 {
-    "name": "sudar/edd-campaign-tracker",
+    "name": "easydigitaldownloads/edd-campaign-tracker",
     "description": "Tracks Google campaign data and associates EDD orders with campaign data",
     "license": "GPL-2.0+",
     "type": "wordpress-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "authors": [
         {
-            "name": "Sudar Muthu",
-            "homepage": "http://sudarmuthu.com"
+            "name": "Sandhills Development, LLC",
+            "homepage": "http://sandhillsdev.com/"
         }
     ]
 }

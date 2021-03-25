@@ -3,10 +3,12 @@
  * Campaign Reports.
  *
  * @since 1.0.0
- * @author Bulk WP <http://bulkwp.com>
+ * @author Sandhills Development, LLC
  * @package EDD\Campaign Tracker
  */
 
+use EDD\Reports\Data\Report_Registry;
+use function EDD\Reports\get_filter_value;
 
 defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 
@@ -47,10 +49,322 @@ class EDDCT_Reports {
 	 * @since 1.0
 	 */
 	protected function setup_hooks() {
-		add_filter( 'edd_report_views', array( $this, 'add_campaign_view' ) );
-		add_action( 'edd_reports_view_campaign', array( $this, 'render_campaign_earnings' ) );
+		if ( function_exists( 'edd_get_orders' ) ) {
+			add_filter( 'edd_report_filters', array( $this, 'add_campaign_filter' ) );
+			add_action( 'edd_reports_init', array( $this, 'register_reports' ) );
+		} else {
+			add_filter( 'edd_report_views', array( $this, 'add_campaign_view' ) );
+			add_action( 'edd_reports_view_campaign', array( $this, 'render_campaign_earnings' ) );
+			add_action( 'edd_filter_campaign_reports', array( $this, 'parse_report_dates' ) );
+		}
+	}
 
-		add_action( 'edd_filter_campaign_reports', array( $this, 'parse_report_dates' ) );
+	/**
+	 * Adds a new report filter for "Campaign".
+	 *
+	 * @param array $filters
+	 *
+	 * @since 1.0.1
+	 * @return array
+	 */
+	public function add_campaign_filter( $filters ) {
+		$filters['campaign_tracker'] = array(
+			'label'            => __( 'Campaign', 'edd-campaign-tracker' ),
+			'display_callback' => array( $this, 'display_campaign_filter' )
+		);
+
+		return $filters;
+	}
+
+	/**
+	 * Displays the campaign filter.
+	 *
+	 * @since 1.0.1
+	 * @return void
+	 */
+	public function display_campaign_filter() {
+		$campaigns = $this->get_campaign_list();
+
+		if ( empty( $campaigns ) ) {
+			return;
+		}
+
+		$campaigns = array_combine( $campaigns, $campaigns );
+		natsort( $campaigns );
+		?>
+		<span class="edd-graph-filter-options graph-option-section">
+			<label for="edd-campaign-tracker-filter" class="screen-reader-text">
+				<?php esc_html_e( 'Filter by campaign', 'edd-campaign-tracker' ); ?>
+			</label>
+			<?php
+			echo EDD()->html->select( array(
+				'options'          => $campaigns,
+				'name'             => 'campaign_tracker',
+				'id'               => 'edd-campaign-tracker-filter',
+				'selected'         => get_filter_value( 'campaign_tracker' ),
+				'show_option_all'  => __( 'All Campaigns', 'edd-campaign-tracker' ),
+				'show_option_none' => false,
+				'chosen'           => true
+			) );
+			?>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Registers reports in EDD 3.0+
+	 *
+	 * @param Report_Registry $reports
+	 *
+	 * @since 1.0.1
+	 * @return void
+	 */
+	public function register_reports( $reports ) {
+		try {
+			$reports->add_report( 'campaign_tracker', array(
+				'label'     => __( 'Campaigns', 'edd-campaign-tracker' ),
+				'icon'      => 'share',
+				'priority'  => 50,
+				'filters'   => array( 'dates', 'campaign_tracker' ),
+				'endpoints' => array(
+					'tiles' => array(
+						'campaign_tracker_earnings',
+						'campaign_tracker_sales'
+					),
+					'charts' => array(
+						'campaign_tracker_earnings_chart'
+					)
+				)
+			) );
+
+			$reports->register_endpoint( 'campaign_tracker_earnings', array(
+				'label' => __( 'Earnings', 'edd-campaign-tracker' ),
+				'views' => array(
+					'tile' => array(
+						'data_callback' => array( $this, 'earnings_callback' ),
+						'display_args'  => array(
+							'comparison_label' => ''
+						)
+					)
+				)
+			) );
+
+			$reports->register_endpoint( 'campaign_tracker_sales', array(
+				'label' => __( 'Sales', 'edd-campaign-tracker' ),
+				'views' => array(
+					'tile' => array(
+						'data_callback' => array( $this, 'sales_callback' ),
+						'display_args'  => array(
+							'comparison_label' => ''
+						)
+					)
+				)
+			) );
+
+			$reports->register_endpoint( 'campaign_tracker_earnings_chart', array(
+				'label' => __( 'Earnings Over Time', 'edd-campaign-tracker' ),
+				'views' => array(
+					'chart' => array(
+						'data_callback' => array( $this, 'earnings_chart' ),
+						'type'          => 'line',
+						'options'       => array(
+							'datasets' => array(
+								'number' => array(
+									'label'                => __( 'Number of Sales', 'edd-campaign-tracker' ),
+									'borderColor'          => 'rgb(252,108,18)',
+									'backgroundColor'      => 'rgba(252,108,18,0.2)',
+									'fill'                 => true,
+									'borderDash'           => array( 2, 6 ),
+									'borderCapStyle'       => 'round',
+									'borderJoinStyle'      => 'round',
+									'pointRadius'          => 4,
+									'pointHoverRadius'     => 6,
+									'pointBackgroundColor' => 'rgb(255,255,255)',
+								),
+								'amount' => array(
+									'label'                => __( 'Earnings', 'edd-campaign-tracker' ),
+									'borderColor'          => 'rgb(24,126,244)',
+									'backgroundColor'      => 'rgba(24,126,244,0.05)',
+									'fill'                 => true,
+									'borderWidth'          => 2,
+									'type'                 => 'currency',
+									'pointRadius'          => 4,
+									'pointHoverRadius'     => 6,
+									'pointBackgroundColor' => 'rgb(255,255,255)',
+								),
+							)
+						)
+					)
+				)
+			) );
+		} catch ( EDD_Exception $e ) {
+
+		}
+	}
+
+	/**
+	 * Returns the campaign WHERE clause for the database query.
+	 *
+	 * @since 1.0.1
+	 * @return string
+	 */
+	private function get_campaign_condition() {
+		global $wpdb;
+
+		$campaign = EDD\Reports\get_filter_value( 'campaign_tracker' );
+
+		$campaign_condition = "AND meta_key = '_eddct_campaign_name'";
+		if ( $campaign && 'all' !== $campaign ) {
+			$campaign_condition .= $wpdb->prepare( " AND meta_value = %s", $campaign );
+		}
+
+		return $campaign_condition;
+	}
+
+	/**
+	 * Calculates the total campaign earnings within the current period.
+	 *
+	 * @since 1.0.1
+	 * @return string
+	 */
+	public function earnings_callback() {
+		global $wpdb;
+
+		$dates  = EDD\Reports\get_dates_filter( 'objects' );
+		$column = EDD\Reports\get_taxes_excluded_filter() ? 'total - tax' : 'total';
+
+		$earnings = $wpdb->get_var( $wpdb->prepare(
+			"SELECT SUM({$column}) FROM {$wpdb->edd_orders} edd_o
+			INNER JOIN {$wpdb->edd_ordermeta} edd_ometa ON( edd_o.id = edd_ometa.edd_order_id )
+			WHERE edd_o.type = 'sale'
+			AND edd_o.status IN( 'complete', 'revoked' )
+			AND edd_o.date_created >= %s AND edd_o.date_created <= %s
+			{$this->get_campaign_condition()}",
+			$dates['start']->copy()->format( 'mysql' ),
+			$dates['end']->copy()->format( 'mysql' )
+		) );
+
+		if ( is_null( $earnings ) ) {
+			$earnings = 0;
+		}
+
+		return edd_currency_filter( edd_format_amount( $earnings ) );
+	}
+
+	/**
+	 * Calculates the total campaign sales within the current period.
+	 *
+	 * @since 1.0.1
+	 * @return string
+	 */
+	public function sales_callback() {
+		global $wpdb;
+
+		$dates = EDD\Reports\get_dates_filter( 'objects' );
+
+		$sales = $wpdb->get_var( $wpdb->prepare(
+			"SELECT COUNT( edd_o.id ) FROM {$wpdb->edd_orders} edd_o
+			INNER JOIN {$wpdb->edd_ordermeta} edd_ometa ON( edd_o.id = edd_ometa.edd_order_id )
+			WHERE edd_o.type = 'sale'
+			AND edd_o.status IN( 'complete', 'revoked' )
+			AND edd_o.date_created >= %s AND edd_o.date_created <= %s
+			{$this->get_campaign_condition()}",
+			$dates['start']->copy()->format( 'mysql' ),
+			$dates['end']->copy()->format( 'mysql' )
+		) );
+
+		return number_format_i18n( absint( $sales ) );
+	}
+
+	/**
+	 * Retrieves results for campaign earnings/sales over time.
+	 *
+	 * @since 1.0.1
+	 * @return array
+	 */
+	public function earnings_chart() {
+		global $wpdb;
+
+		$dates        = EDD\Reports\get_dates_filter( 'objects' );
+		$day_by_day   = EDD\Reports\get_dates_filter_day_by_day();
+		$hour_by_hour = EDD\Reports\get_dates_filter_hour_by_hour();
+		$column       = EDD\Reports\get_taxes_excluded_filter() ? 'total - tax' : 'total';
+
+		$results = $wpdb->get_results( $wpdb->prepare(
+			"SELECT COUNT(edd_o.id) AS number, SUM({$column}) AS amount, edd_o.date_created AS date
+			FROM {$wpdb->edd_orders} edd_o
+			INNER JOIN {$wpdb->edd_ordermeta} edd_ometa ON( edd_o.id = edd_ometa.edd_order_id )
+			WHERE edd_o.type = 'sale'
+			AND edd_o.status IN( 'complete', 'revoked' )
+			AND edd_o.date_created >= %s AND edd_o.date_created <= %s
+			{$this->get_campaign_condition()}
+			GROUP BY DATE(date_created)
+			ORDER BY DATE(date_created)",
+			$dates['start']->copy()->format( 'mysql' ),
+			$dates['end']->copy()->format( 'mysql' )
+		) );
+
+		$number = $amount = array();
+
+		try {
+			// Initialise all arrays with timestamps and set values to 0.
+			while ( strtotime( $dates['start']->copy()->format( 'mysql' ) ) <= strtotime( $dates['end']->copy()->format( 'mysql' ) ) ) {
+				$timestamp = strtotime( $dates['start']->copy()->format( 'mysql' ) );
+
+				$number[ $timestamp ][0] = $timestamp;
+				$number[ $timestamp ][1] = 0;
+
+				$amount[ $timestamp ][0] = $timestamp;
+				$amount[ $timestamp ][1] = 0.00;
+
+				// Loop through each date there were results, which we queried from the database.
+				foreach ( $results as $result ) {
+
+					$timezone         = new DateTimeZone( 'UTC' );
+					$date_of_db_value = new DateTime( $result->date, $timezone );
+					$date_on_chart    = new DateTime( $dates['start'], $timezone );
+
+					// Add any results that happened during this hour.
+					if ( $hour_by_hour ) {
+						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
+						if ( $date_of_db_value->format( 'Y-m-d H' ) === $date_on_chart->format( 'Y-m-d H' ) ) {
+							$number[ $timestamp ][1] += $result->number;
+							$amount[ $timestamp ][1] += abs( $result->amount );
+						}
+						// Add any results that happened during this day.
+					} elseif ( $day_by_day ) {
+						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
+						if ( $date_of_db_value->format( 'Y-m-d' ) === $date_on_chart->format( 'Y-m-d' ) ) {
+							$number[ $timestamp ][1] += $result->number;
+							$amount[ $timestamp ][1] += abs( $result->amount );
+						}
+						// Add any results that happened during this month.
+					} else {
+						// If the date of this db value matches the date on this line graph/chart, set the y axis value for the chart to the number in the DB result.
+						if ( $date_of_db_value->format( 'Y-m' ) === $date_on_chart->format( 'Y-m' ) ) {
+							$number[ $timestamp ][1] += $result->number;
+							$amount[ $timestamp ][1] += abs( $result->amount );
+						}
+					}
+				}
+
+				// Move the chart along to the next hour/day/month to get ready for the next loop.
+				if ( $hour_by_hour ) {
+					$dates['start']->addHour( 1 );
+				} elseif ( $day_by_day ) {
+					$dates['start']->addDays( 1 );
+				} else {
+					$dates['start']->addMonth( 1 );
+				}
+			}
+		} catch ( \Exception $e ) {
+
+		}
+
+		return array(
+			'number' => array_values( $number ),
+			'amount' => array_values( $amount ),
+		);
 	}
 
 	/**
@@ -376,13 +690,22 @@ class EDDCT_Reports {
 	protected function get_campaign_list() {
 		global $wpdb;
 
-		$campaigns = $wpdb->get_col( $wpdb->prepare( "
-			SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
-			LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-			WHERE pm.meta_key = '%s'
-			AND p.post_status = '%s'
-			AND p.post_type = '%s'
-		", '_eddct_campaign_name', 'publish', 'edd_payment' ) );
+		if ( function_exists( 'edd_get_orders' ) ) {
+			$campaigns = $wpdb->get_col(
+		"SELECT DISTINCT ometa.meta_value FROM {$wpdb->edd_ordermeta} ometa
+				LEFT JOIN {$wpdb->edd_orders} o ON( o.id = ometa.edd_order_id )
+				WHERE ometa.meta_key = '_eddct_campaign_name'
+				AND o.status IN( 'complete', 'revoked' )"
+			);
+		} else {
+			$campaigns = $wpdb->get_col( $wpdb->prepare( "
+				SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+				LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+				WHERE pm.meta_key = '%s'
+				AND p.post_status = '%s'
+				AND p.post_type = '%s'
+			", '_eddct_campaign_name', 'publish', 'edd_payment' ) );
+		}
 
 		asort( $campaigns );
 		return $campaigns;
@@ -426,7 +749,7 @@ class EDDCT_Reports {
 	 * @param  int    $hour      Hour
 	 * @return int    $earnings  Earnings
 	 */
-	protected function get_earnings_by_date( $campaign = null, $day = null, $month_num, $year = null, $hour = null ) {
+	protected function get_earnings_by_date( $campaign, $day, $month_num, $year = null, $hour = null ) {
 		global $wpdb;
 
 		$args = array(
@@ -522,7 +845,7 @@ class EDDCT_Reports {
 		$args = apply_filters( 'eddct_get_sales_by_date_args', $args );
 
 		$key   = md5( serialize( $args ) );
-		$count = get_transient( $key, 'edd' );
+		$count = get_transient( $key );
 
 		if ( false === $count ) {
 			$sales = new WP_Query( $args );
