@@ -28,7 +28,7 @@ class EDDCT_Campaign_Logger {
 
 		$campaign_info = self::get_campaign_info();
 		if ( ! empty( $campaign_info ) ) {
-			$payment_meta['campaign_info'] = $campaign_info;
+			$payment_meta['eddct_campaign'] = $campaign_info;
 		}
 
 		return $payment_meta;
@@ -45,7 +45,7 @@ class EDDCT_Campaign_Logger {
 		$campaign_info = self::get_campaign_info();
 
 		if ( ! empty( $campaign_info ) ) {
-			edd_add_order_meta( $order_id, 'campaign_info', $campaign_info );
+			edd_add_order_meta( $order_id, 'eddct_campaign', $campaign_info );
 		}
 	}
 
