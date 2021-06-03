@@ -20,7 +20,43 @@ class EDDCT_Campaign_Logger {
 	 * @return array               Modified Payment Meta Information
 	 */
 	public static function log_campaign( $payment_meta ) {
-		$ga_parser = new GA_Parser();
+
+		// In EDD 3.0, this is handled by the add_campaign_order_meta method.
+		if ( function_exists( 'edd_add_order_meta' ) ) {
+			return $payment_meta;
+		}
+
+		$campaign_info = self::get_campaign_info();
+		if ( ! empty( $campaign_info ) ) {
+			$payment_meta['campaign_info'] = $campaign_info;
+		}
+
+		return $payment_meta;
+	}
+
+	/**
+	 * Adds the campaign info to the order meta in EDD 3.0.
+	 *
+	 * @since 1.0.2
+	 * @param int $order_id
+	 * @return void
+	 */
+	public static function add_campaign_order_meta( $order_id ) {
+		$campaign_info = self::get_campaign_info();
+
+		if ( ! empty( $campaign_info ) ) {
+			edd_add_order_meta( $order_id, 'campaign_info', $campaign_info );
+		}
+	}
+
+	/**
+	 * Gets the campaign info.
+	 *
+	 * @since 1.0.2
+	 * @return array
+	 */
+	private static function get_campaign_info() {
+		$ga_parser     = new GA_Parser();
 		$campaign_info = array();
 
 		if ( $ga_parser->cookie_present() ) {
@@ -29,8 +65,6 @@ class EDDCT_Campaign_Logger {
 			$campaign_info['medium']  = trim( $ga_parser->campaign_medium );
 			$campaign_info['term']    = trim( $ga_parser->campaign_term );
 			$campaign_info['content'] = trim( $ga_parser->campaign_content );
-
-			$payment_meta['eddct_campaign'] = $campaign_info;
 		} else {
 			$campaign_source   = EDD()->session->get( self::get_session_id( 'source' ) );
 			$campaign_campaign = EDD()->session->get( self::get_session_id( 'campaign' ) );
@@ -44,11 +78,10 @@ class EDDCT_Campaign_Logger {
 				$campaign_info['medium']  = trim( $campaign_medium );
 				$campaign_info['term']    = trim( $campaign_term );
 				$campaign_info['content'] = trim( $campaign_content );
-
-				$payment_meta['eddct_campaign'] = $campaign_info;
 			}
 		}
-		return $payment_meta;
+
+		return $campaign_info;
 	}
 
 	/**
@@ -113,5 +146,6 @@ class EDDCT_Campaign_Logger {
 }
 
 add_action( 'init', array( 'EDDCT_Campaign_Logger', 'store_campaign' ) );
-add_action( 'edd_payment_meta', array( 'EDDCT_Campaign_Logger', 'log_campaign' ) );
+add_filter( 'edd_payment_meta', array( 'EDDCT_Campaign_Logger', 'log_campaign' ) );
+add_action( 'edd_built_order', array( 'EDDCT_Campaign_Logger', 'add_campaign_order_meta' ) );
 add_action( 'edd_insert_payment', array( 'EDDCT_Campaign_Logger', 'log_campaign_name' ), 10, 2 );
