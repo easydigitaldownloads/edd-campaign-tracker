@@ -56,11 +56,34 @@ class EDDCT_Payment_Screen {
 			return false;
 		}
 
-		$payment_meta = edd_get_payment_meta( $payment_id );
-		if ( isset( $payment_meta['eddct_campaign'] ) ) {
-			$campaign_info = $payment_meta['eddct_campaign'];
-			ob_start();
-?>
+		$campaign_info = false;
+		if ( function_exists( 'edd_get_order_meta' ) ) {
+			$campaign_info = edd_get_order_meta( $payment_id, 'eddct_campaign', true );
+		}
+		if ( ! $campaign_info ) {
+			$payment_meta = edd_get_payment_meta( $payment_id );
+			if ( ! empty( $payment_meta['eddct_campaign'] ) ) {
+				$campaign_info = $payment_meta['eddct_campaign'];
+			}
+			// In EDD 3.0, if this metadata exists, it was not migrated, so go ahead and migrate it now.
+			if ( $campaign_info && function_exists( 'edd_add_order_meta' ) ) {
+				edd_add_order_meta( $payment_id, 'eddct_campaign', $campaign_info );
+
+				// Update the remaining payment meta, or delete if nothing is left.
+				unset( $payment_meta['eddct_campaign'] );
+				if ( empty( $payment_meta ) ) {
+					edd_delete_order_meta( $payment_id, 'payment_meta' );
+				} else {
+					edd_update_order_meta( $payment_id, 'payment_meta', $payment_meta );
+				}
+			}
+		}
+
+		if ( ! $campaign_info ) {
+			return __( 'No campaign information available', 'edd-campaign-tracker' );
+		}
+		ob_start();
+		?>
 		<table style="width: 100%; border:1px solid #eee;" border="0">
 			<tr><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Campaign Detail', 'edd-campaign-tracker' ); ?></th><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Value', 'edd-campaign-tracker' ); ?></th></tr>
 			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['name'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['name']; ?></td></tr>
@@ -69,12 +92,8 @@ class EDDCT_Payment_Screen {
 			<tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['term'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['term']; ?></td></tr>
 			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['content'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['content']; ?></td></tr>
 		</table>
-<?php
-			$output = ob_get_clean();
-		} else {
-			$output = __( 'No campaign information available', 'edd-campaign-tracker' );
-		}
-		return $output;
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
