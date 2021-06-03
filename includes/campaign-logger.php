@@ -64,7 +64,7 @@ class EDDCT_Campaign_Logger {
 			$campaign_info = $payment_meta['eddct_campaign'];
 
 			if ( isset( $campaign_info['name'] ) ) {
-				update_post_meta( $payment_id, '_eddct_campaign_name', $campaign_info['name'] );
+				edd_update_payment_meta( $payment_id, '_eddct_campaign_name', $campaign_info['name'] );
 			}
 		}
 	}
