@@ -20,27 +20,18 @@ class EDDCT_Payment_Screen {
 	 * @param int     $payment_id (optional) Payment post ID.
 	 */
 	public static function render_metabox( $payment_id = 0 ) {
-		self::do_meta_box( __( 'Campaign Information', 'edd-campaign-tracker' ), self::render_campaign_info( $payment_id ) );
-	}
-
-	/**
-	 * Wrapper function for generating a metabox-style container on an EDD admin page.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 * @param string  $title    (optional) Metabox title.
-	 * @param string  $contents (optional) Metabox contents.
-	 * @return string           HTML markup.
-	 */
-	private static function do_meta_box( $title = '', $contents = '' ) {
-?>
+		// If we don't have an actual order object, bail now.
+		if ( empty( $payment_id ) ) {
+			return;
+		}
+		?>
 		<div id="edd-order-data" class="postbox">
-			<h3 class="hndle"><?php echo $title ?></h3>
+			<h3 class="hndle"><?php esc_html_e( 'Campaign Information', 'edd-campaign-tracker' ); ?></h3>
 			<div class="inside">
-				<?php echo $contents; ?>
+				<?php self::render_campaign_info( $payment_id ); ?>
 			</div>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -51,16 +42,11 @@ class EDDCT_Payment_Screen {
 	 * @return string             Campaign info
 	 */
 	public static function render_campaign_info( $payment_id ) {
-		// If we don't have an actual order object, bail now
-		if ( empty( $payment_id ) ) {
-			return false;
-		}
 
 		$campaign_info = self::get_campaign_info( $payment_id );
 		if ( ! $campaign_info ) {
-			return __( 'No campaign information available.', 'edd-campaign-tracker' );
+			esc_html_e( 'No campaign information available.', 'edd-campaign-tracker' );
 		}
-		ob_start();
 		?>
 		<style type="text/css">.eddct-list { list-style: disc; margin-left: 24px; } </style>
 		<ul class="eddct-list">
@@ -83,7 +69,6 @@ class EDDCT_Payment_Screen {
 			?>
 		</ul>
 		<?php
-		return ob_get_clean();
 	}
 
 	/**
