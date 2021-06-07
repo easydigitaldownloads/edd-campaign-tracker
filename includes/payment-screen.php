@@ -56,29 +56,7 @@ class EDDCT_Payment_Screen {
 			return false;
 		}
 
-		$campaign_info = false;
-		if ( function_exists( 'edd_get_order_meta' ) ) {
-			$campaign_info = edd_get_order_meta( $payment_id, 'eddct_campaign', true );
-		}
-		if ( ! $campaign_info ) {
-			$payment_meta = edd_get_payment_meta( $payment_id );
-			if ( ! empty( $payment_meta['eddct_campaign'] ) ) {
-				$campaign_info = $payment_meta['eddct_campaign'];
-			}
-			// In EDD 3.0, if this metadata exists, it was not migrated, so go ahead and migrate it now.
-			if ( $campaign_info && function_exists( 'edd_add_order_meta' ) ) {
-				edd_add_order_meta( $payment_id, 'eddct_campaign', $campaign_info );
-
-				// Update the remaining payment meta, or delete if nothing is left.
-				unset( $payment_meta['eddct_campaign'] );
-				if ( empty( $payment_meta ) ) {
-					edd_delete_order_meta( $payment_id, 'payment_meta' );
-				} else {
-					edd_update_order_meta( $payment_id, 'payment_meta', $payment_meta );
-				}
-			}
-		}
-
+		$campaign_info = self::get_campaign_info( $payment_id );
 		if ( ! $campaign_info ) {
 			return __( 'No campaign information available.', 'edd-campaign-tracker' );
 		}
@@ -145,14 +123,12 @@ class EDDCT_Payment_Screen {
 	 * @return string              Value for the column
 	 */
 	public static function render_campaign_column( $value, $payment_id, $column_name ) {
-		if ( 'campaign' == $column_name ) {
-			$payment_meta = edd_get_payment_meta( $payment_id );
-			if ( isset( $payment_meta['eddct_campaign'] ) ) {
-				$campaign_info = $payment_meta['eddct_campaign'];
+		if ( 'campaign' === $column_name ) {
+			$value         = __( 'N/A', 'edd-campaign-tracker' );
+			$campaign_info = self::get_campaign_info( $payment_id );
+			if ( ! empty( $campaign_info['name'] ) ) {
 				$display_name = $campaign_info['name'];
-				$value = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . $display_name . '</a>';
-			} else {
-				$value = __( 'N/A', 'edd-campaign-tracker' );
+				$value        = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . esc_html( $display_name ) . '</a>';
 			}
 		}
 		return $value;
@@ -212,6 +188,40 @@ class EDDCT_Payment_Screen {
 		}
 
 		return $where;
+	}
+
+	/**
+	 * Gets the order campaign information.
+	 *
+	 * @since 1.0.2
+	 * @param  int $payment_id The order/payment ID.
+	 * @return array|false     The campaign information if it exists; false if it does not.
+	 */
+	private static function get_campaign_info( $payment_id ) {
+		$campaign_info = false;
+		if ( function_exists( 'edd_get_order_meta' ) ) {
+			$campaign_info = edd_get_order_meta( $payment_id, 'eddct_campaign', true );
+		}
+		if ( ! $campaign_info ) {
+			$payment_meta = edd_get_payment_meta( $payment_id );
+			if ( ! empty( $payment_meta['eddct_campaign'] ) ) {
+				$campaign_info = $payment_meta['eddct_campaign'];
+			}
+			// In EDD 3.0, if this metadata exists, it was not migrated, so go ahead and migrate it now.
+			if ( $campaign_info && function_exists( 'edd_add_order_meta' ) ) {
+				edd_add_order_meta( $payment_id, 'eddct_campaign', $campaign_info );
+
+				// Update the remaining payment meta, or delete if nothing is left.
+				unset( $payment_meta['eddct_campaign'] );
+				if ( empty( $payment_meta ) ) {
+					edd_delete_order_meta( $payment_id, 'payment_meta' );
+				} else {
+					edd_update_order_meta( $payment_id, 'payment_meta', $payment_meta );
+				}
+			}
+		}
+
+		return $campaign_info;
 	}
 }
 
