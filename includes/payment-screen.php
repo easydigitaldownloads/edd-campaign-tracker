@@ -80,7 +80,7 @@ class EDDCT_Payment_Screen {
 		}
 
 		if ( ! $campaign_info ) {
-			return __( 'No campaign information available', 'edd-campaign-tracker' );
+			return __( 'No campaign information available.', 'edd-campaign-tracker' );
 		}
 		ob_start();
 		?>
