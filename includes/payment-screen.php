@@ -111,14 +111,12 @@ class EDDCT_Payment_Screen {
 	 * @return string              Value for the column
 	 */
 	public static function render_campaign_column( $value, $payment_id, $column_name ) {
-		if ( 'campaign' == $column_name ) {
-			$payment_meta = edd_get_payment_meta( $payment_id );
-			if ( isset( $payment_meta['eddct_campaign'] ) ) {
-				$campaign_info = $payment_meta['eddct_campaign'];
+		if ( 'campaign' === $column_name ) {
+			$value         = __( 'N/A', 'edd-campaign-tracker' );
+			$campaign_info = self::get_campaign_info( $payment_id );
+			if ( ! empty( $campaign_info['name'] ) ) {
 				$display_name = $campaign_info['name'];
-				$value = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . $display_name . '</a>';
-			} else {
-				$value = __( 'N/A', 'edd-campaign-tracker' );
+				$value        = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . esc_html( $display_name ) . '</a>';
 			}
 		}
 		return $value;
