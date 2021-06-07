@@ -84,14 +84,26 @@ class EDDCT_Payment_Screen {
 		}
 		ob_start();
 		?>
-		<table style="width: 100%; border:1px solid #eee;" border="0">
-			<tr><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Campaign Detail', 'edd-campaign-tracker' ); ?></th><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Value', 'edd-campaign-tracker' ); ?></th></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['name'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['name']; ?></td></tr>
-			<tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Source', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['source'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['source']; ?></td></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Medium', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['medium'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['medium']; ?></td></tr>
-			<tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['term'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['term']; ?></td></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['content'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['content']; ?></td></tr>
-		</table>
+		<style type="text/css">.eddct-list { list-style: disc; margin-left: 24px; } </style>
+		<ul class="eddct-list">
+			<li><strong><?php esc_html_e( 'Campaign Source', 'edd-campaign-tracker' ); ?>:</strong> <code><?php echo esc_html( $campaign_info['source'] ); ?></code></li>
+			<li><strong><?php esc_html_e( 'Campaign Medium', 'edd-campaign-tracker' ); ?>:</strong> <code><?php echo esc_html( $campaign_info['medium'] ); ?></code></li>
+			<li><strong><?php esc_html_e( 'Campaign Name', 'edd-campaign-tracker' ); ?>:</strong> <code><?php echo esc_html( $campaign_info['name'] ); ?></code></li>
+			<?php
+			// The campaign term is optional so may be empty.
+			if ( ! empty( $campaign_info['term'] ) ) {
+				?>
+				<li><strong><?php esc_html_e( 'Campaign Term', 'edd-campaign-tracker' ); ?>:</strong> <code><?php echo esc_html( $campaign_info['term'] ); ?></code></li>
+				<?php
+			}
+			// The campaign content is optional so may be empty.
+			if ( ! empty( $campaign_info['content'] ) ) {
+				?>
+				<li><strong><?php esc_html_e( 'Campaign Content', 'edd-campaign-tracker' ); ?>:</strong> <code><?php echo esc_html( $campaign_info['content'] ); ?></code></li>
+				<?php
+			}
+			?>
+		</ul>
 		<?php
 		return ob_get_clean();
 	}
