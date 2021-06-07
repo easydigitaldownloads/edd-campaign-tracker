@@ -28,7 +28,7 @@ class EDDCT_Payment_Screen {
 		<div id="edd-order-data" class="postbox">
 			<h3 class="hndle"><?php esc_html_e( 'Campaign Information', 'edd-campaign-tracker' ); ?></h3>
 			<div class="inside">
-				<?php self::render_campaign_info( $payment_id ); ?>
+				<?php echo self::render_campaign_info( $payment_id ); ?>
 			</div>
 		</div>
 		<?php
@@ -43,10 +43,14 @@ class EDDCT_Payment_Screen {
 	 */
 	public static function render_campaign_info( $payment_id ) {
 
+		if ( empty( $payment_id ) ) {
+			return '';
+		}
 		$campaign_info = self::get_campaign_info( $payment_id );
 		if ( ! $campaign_info ) {
-			esc_html_e( 'No campaign information available.', 'edd-campaign-tracker' );
+			return __( 'No campaign information available.', 'edd-campaign-tracker' );
 		}
+		ob_start();
 		?>
 		<style type="text/css">.eddct-list { list-style: disc; margin-left: 24px; } </style>
 		<ul class="eddct-list">
@@ -69,6 +73,8 @@ class EDDCT_Payment_Screen {
 			?>
 		</ul>
 		<?php
+
+		return ob_get_clean();
 	}
 
 	/**
