@@ -38,7 +38,7 @@ class EDDCT_Campaign_Logger {
 	 * Adds the campaign info to the order meta in EDD 3.0.
 	 *
 	 * @since 1.0.2
-	 * @param int $order_id
+	 * @param int $order_id The order ID.
 	 * @return void
 	 */
 	public static function add_campaign_order_meta( $order_id ) {
