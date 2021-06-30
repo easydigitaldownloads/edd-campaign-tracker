@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "build": "npm run i18n",
+    "dev": "cross-env NODE_ENV=production wp-scripts start",
+    "i18n": "wp i18n make-pot . languages/edd-campaign-tracker.pot --domain=edd-campaign-tracker --headers='{\"Report-Msgid-Bugs-To\": \"https://easydigitaldownloads.com/support\"}'"
+  }
+}

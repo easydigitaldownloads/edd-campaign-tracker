@@ -3,11 +3,11 @@
     "description": "Tracks Google campaign data and associates EDD orders with campaign data",
     "license": "GPL-2.0+",
     "type": "wordpress-plugin",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "authors": [
         {
             "name": "Sandhills Development, LLC",
-            "homepage": "http://sandhillsdev.com/"
+            "homepage": "https://sandhillsdev.com/"
         }
     ]
 }

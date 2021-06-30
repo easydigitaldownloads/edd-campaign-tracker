@@ -20,27 +20,18 @@ class EDDCT_Payment_Screen {
 	 * @param int     $payment_id (optional) Payment post ID.
 	 */
 	public static function render_metabox( $payment_id = 0 ) {
-		self::do_meta_box( __( 'Campaign Information', 'edd-campaign-tracker' ), self::render_campaign_info( $payment_id ) );
-	}
-
-	/**
-	 * Wrapper function for generating a metabox-style container on an EDD admin page.
-	 *
-	 * @since  1.0.0
-	 * @access private
-	 * @param string  $title    (optional) Metabox title.
-	 * @param string  $contents (optional) Metabox contents.
-	 * @return string           HTML markup.
-	 */
-	private static function do_meta_box( $title = '', $contents = '' ) {
-?>
+		// If we don't have an actual order object, bail now.
+		if ( empty( $payment_id ) ) {
+			return;
+		}
+		?>
 		<div id="edd-order-data" class="postbox">
-			<h3 class="hndle"><?php echo $title ?></h3>
+			<h3 class="hndle"><?php esc_html_e( 'Campaign Information', 'edd-campaign-tracker' ); ?></h3>
 			<div class="inside">
-				<?php echo $contents; ?>
+				<?php echo self::render_campaign_info( $payment_id ); ?>
 			</div>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -51,30 +42,39 @@ class EDDCT_Payment_Screen {
 	 * @return string             Campaign info
 	 */
 	public static function render_campaign_info( $payment_id ) {
-		// If we don't have an actual order object, bail now
-		if ( empty( $payment_id ) ) {
-			return false;
-		}
 
-		$payment_meta = edd_get_payment_meta( $payment_id );
-		if ( isset( $payment_meta['eddct_campaign'] ) ) {
-			$campaign_info = $payment_meta['eddct_campaign'];
-			ob_start();
-?>
-		<table style="width: 100%; border:1px solid #eee;" border="0">
-			<tr><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Campaign Detail', 'edd-campaign-tracker' ); ?></th><th style="background:#333; color:#fff; text-align:left; padding:10px;"><?php _e( 'Value', 'edd-campaign-tracker' ); ?></th></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Name', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['name'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['name']; ?></td></tr>
-			<tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Source', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['source'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['source']; ?></td></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Medium', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['medium'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['medium']; ?></td></tr>
-			<tr style="background: #f7f7f7;"><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Term', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['term'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['term']; ?></td></tr>
-			<tr><td style="text-align:left; padding:10px;"><?php _e( 'Campaign Content', 'edd-campaign-tracker' );?></td><td style="text-align:left; padding:10px;"><?php echo empty( $campaign_info['content'] ) ? __( 'N/A' , 'edd-campaign-tracker' ) : $campaign_info['content']; ?></td></tr>
-		</table>
-<?php
-			$output = ob_get_clean();
-		} else {
-			$output = __( 'No campaign information available', 'edd-campaign-tracker' );
+		if ( empty( $payment_id ) ) {
+			return '';
 		}
-		return $output;
+		$campaign_info = self::get_campaign_info( $payment_id );
+		if ( ! $campaign_info ) {
+			return __( 'No campaign information available.', 'edd-campaign-tracker' );
+		}
+		$labels = array(
+			'source'  => __( 'Campaign Source', 'edd-campaign-tracker' ),
+			'medium'  => __( 'Campaign Medium', 'edd-campaign-tracker' ),
+			'name'    => __( 'Campaign Name', 'edd-campaign-tracker' ),
+			'term'    => __( 'Campaign Term', 'edd-campaign-tracker' ),
+			'content' => __( 'Campaign Content', 'edd-campaign-tracker' ),
+		);
+		ob_start();
+		?>
+		<style type="text/css">.eddct-list { list-style: disc; margin-left: 24px; } </style>
+		<ul class="eddct-list">
+			<?php
+			// Loop through labels because they're in the order we want.
+			foreach ( $labels as $key => $value ) {
+				if ( ! empty( $campaign_info[ $key ] ) ) {
+					?>
+					<li><strong><?php echo esc_html( $value ); ?>:</strong> <code><?php echo esc_html( $campaign_info[ $key ] ); ?></code></li>
+					<?php
+				}
+			}
+			?>
+		</ul>
+		<?php
+
+		return ob_get_clean();
 	}
 
 	/**
@@ -114,14 +114,12 @@ class EDDCT_Payment_Screen {
 	 * @return string              Value for the column
 	 */
 	public static function render_campaign_column( $value, $payment_id, $column_name ) {
-		if ( 'campaign' == $column_name ) {
-			$payment_meta = edd_get_payment_meta( $payment_id );
-			if ( isset( $payment_meta['eddct_campaign'] ) ) {
-				$campaign_info = $payment_meta['eddct_campaign'];
+		if ( 'campaign' === $column_name ) {
+			$value         = __( 'N/A', 'edd-campaign-tracker' );
+			$campaign_info = self::get_campaign_info( $payment_id );
+			if ( ! empty( $campaign_info['name'] ) ) {
 				$display_name = $campaign_info['name'];
-				$value = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . $display_name . '</a>';
-			} else {
-				$value = __( 'N/A', 'edd-campaign-tracker' );
+				$value        = '<a href="' . esc_url( add_query_arg( array( 'campaign' => urlencode( $display_name ), 'paged' => false ) ) ) . '">' . esc_html( $display_name ) . '</a>';
 			}
 		}
 		return $value;
@@ -181,6 +179,40 @@ class EDDCT_Payment_Screen {
 		}
 
 		return $where;
+	}
+
+	/**
+	 * Gets the order campaign information.
+	 *
+	 * @since 1.0.2
+	 * @param  int $payment_id The order/payment ID.
+	 * @return array|false     The campaign information if it exists; false if it does not.
+	 */
+	private static function get_campaign_info( $payment_id ) {
+		$campaign_info = false;
+		if ( function_exists( 'edd_get_order_meta' ) ) {
+			$campaign_info = edd_get_order_meta( $payment_id, 'eddct_campaign', true );
+		}
+		if ( ! $campaign_info ) {
+			$payment_meta = edd_get_payment_meta( $payment_id );
+			if ( ! empty( $payment_meta['eddct_campaign'] ) ) {
+				$campaign_info = $payment_meta['eddct_campaign'];
+			}
+			// In EDD 3.0, if this metadata exists, it was not migrated, so go ahead and migrate it now.
+			if ( $campaign_info && function_exists( 'edd_add_order_meta' ) ) {
+				edd_add_order_meta( $payment_id, 'eddct_campaign', $campaign_info );
+
+				// Update the remaining payment meta, or delete if nothing is left.
+				unset( $payment_meta['eddct_campaign'] );
+				if ( empty( $payment_meta ) ) {
+					edd_delete_order_meta( $payment_id, 'payment_meta' );
+				} else {
+					edd_update_order_meta( $payment_id, 'payment_meta', $payment_meta );
+				}
+			}
+		}
+
+		return $campaign_info;
 	}
 }
 
