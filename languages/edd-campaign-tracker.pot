@@ -1,99 +1,178 @@
-# Copyright (C) 2015 EDD Campaign Tracker
-# This file is distributed under the same license as the EDD Campaign Tracker package.
+# Copyright (C) 2021 Sandhills Development, LLC
+# This file is distributed under the same license as the Easy Digital Downloads - Campaign Tracker plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: EDD Campaign Tracker 1.0.0\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/edd-campaign-tracker\n"
-"POT-Creation-Date: 2015-01-31 07:30:31+00:00\n"
+"Project-Id-Version: Easy Digital Downloads - Campaign Tracker 1.0.1\n"
+"Report-Msgid-Bugs-To: https://easydigitaldownloads.com/support\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2021-06-30T12:29:29+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: edd-campaign-tracker\n"
 
-#: includes/class.extension-activation.php:47
-msgid "This plugin"
+#. Plugin Name of the plugin
+msgid "Easy Digital Downloads - Campaign Tracker"
 msgstr ""
 
-#: includes/class.extension-activation.php:84
-msgid "activate it"
-msgstr ""
-
-#: includes/class.extension-activation.php:87
-msgid "install it"
-msgstr ""
-
-#: includes/class.extension-activation.php:90
-msgid " requires Easy Digital Downloads! Please %s to continue!"
-msgstr ""
-
-#: includes/email-tag.php:22
-msgid "Display Google Analytics Campaign info for this transaction"
-msgstr ""
-
-#: includes/email-tag.php:33 includes/payment-screen.php:23
-msgid "Campaign Information"
-msgstr ""
-
-#: includes/payment-screen.php:65
-msgid "Campaign Detail"
-msgstr ""
-
-#: includes/payment-screen.php:65
-msgid "Value"
-msgstr ""
-
-#: includes/payment-screen.php:66
-msgid "Campaign Name"
-msgstr ""
-
-#: includes/payment-screen.php:66 includes/payment-screen.php:67
-#: includes/payment-screen.php:68 includes/payment-screen.php:69
-#: includes/payment-screen.php:70 includes/payment-screen.php:110
-msgid "N/A"
-msgstr ""
-
-#: includes/payment-screen.php:67
-msgid "Campaign Source"
-msgstr ""
-
-#: includes/payment-screen.php:68
-msgid "Campaign Medium"
-msgstr ""
-
-#: includes/payment-screen.php:69
-msgid "Campaign Term"
-msgstr ""
-
-#: includes/payment-screen.php:70
-msgid "Campaign Content"
-msgstr ""
-
-#: includes/payment-screen.php:75
-msgid "No campaign information available"
-msgstr ""
-
-#: includes/payment-screen.php:89
-msgid "Campaign"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "EDD Campaign Tracker"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
+#. Plugin URI of the plugin
 msgid "https://easydigitaldownloads.com/downloads/campaign-tracker/"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "Tracks campaign and associates EDD orders with campaign"
+#. Description of the plugin
+msgid "Tracks Google campaign data and associates EDD orders with campaign data."
 msgstr ""
 
-#. Author of the plugin/theme
+#. Author of the plugin
 msgid "Sandhills Development, LLC"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "https://easydigitaldownloads.com/downloads/campaign-tracker/"
+#. Author URI of the plugin
+msgid "http://sandhillsdev.com/"
+msgstr ""
+
+#: includes/email-tag.php:21
+msgid "Display Google Analytics Campaign info for this transaction"
+msgstr ""
+
+#: includes/email-tag.php:32
+#: includes/payment-screen.php:29
+msgid "Campaign Information"
+msgstr ""
+
+#: includes/payment-screen.php:51
+msgid "No campaign information available."
+msgstr ""
+
+#: includes/payment-screen.php:54
+msgid "Campaign Source"
+msgstr ""
+
+#: includes/payment-screen.php:55
+msgid "Campaign Medium"
+msgstr ""
+
+#: includes/payment-screen.php:56
+msgid "Campaign Name"
+msgstr ""
+
+#: includes/payment-screen.php:57
+msgid "Campaign Term"
+msgstr ""
+
+#: includes/payment-screen.php:58
+msgid "Campaign Content"
+msgstr ""
+
+#: includes/payment-screen.php:102
+#: includes/reports.php:72
+msgid "Campaign"
+msgstr ""
+
+#: includes/payment-screen.php:118
+msgid "N/A"
+msgstr ""
+
+#: includes/reports.php:97
+msgid "Filter by campaign"
+msgstr ""
+
+#: includes/reports.php:105
+#: includes/reports.php:634
+msgid "All Campaigns"
+msgstr ""
+
+#: includes/reports.php:125
+#: includes/reports.php:378
+msgid "Campaigns"
+msgstr ""
+
+#: includes/reports.php:141
+#: includes/reports.php:185
+#: includes/reports.php:546
+msgid "Earnings"
+msgstr ""
+
+#: includes/reports.php:153
+#: includes/reports.php:547
+msgid "Sales"
+msgstr ""
+
+#: includes/reports.php:165
+msgid "Earnings Over Time"
+msgstr ""
+
+#: includes/reports.php:173
+msgid "Number of Sales"
+msgstr ""
+
+#: includes/reports.php:556
+msgid "Earnings Over Time based on Campaign"
+msgstr ""
+
+#: includes/reports.php:566
+msgid "Total earnings for period shown: "
+msgstr ""
+
+#: includes/reports.php:567
+msgid "Total sales for period shown: "
+msgstr ""
+
+#: includes/reports.php:591
+msgid "Today"
+msgstr ""
+
+#: includes/reports.php:592
+msgid "Yesterday"
+msgstr ""
+
+#: includes/reports.php:593
+msgid "This Week"
+msgstr ""
+
+#: includes/reports.php:594
+msgid "Last Week"
+msgstr ""
+
+#: includes/reports.php:595
+msgid "This Month"
+msgstr ""
+
+#: includes/reports.php:596
+msgid "Last Month"
+msgstr ""
+
+#: includes/reports.php:597
+msgid "This Quarter"
+msgstr ""
+
+#: includes/reports.php:598
+msgid "Last Quarter"
+msgstr ""
+
+#: includes/reports.php:599
+msgid "This Year"
+msgstr ""
+
+#: includes/reports.php:600
+msgid "Last Year"
+msgstr ""
+
+#: includes/reports.php:601
+msgid "Custom"
+msgstr ""
+
+#: includes/reports.php:642
+msgid "From"
+msgstr ""
+
+#: includes/reports.php:658
+msgid "To"
+msgstr ""
+
+#: includes/reports.php:677
+msgid "Filter"
 msgstr ""
