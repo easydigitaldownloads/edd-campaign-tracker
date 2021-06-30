@@ -5,7 +5,7 @@
  * Description: Tracks Google campaign data and associates EDD orders with campaign data.
  * License: GPL
  * Author: Sandhills Development, LLC
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author URI: http://sandhillsdev.com/
  * Text Domain: edd-campaign-tracker
  * Domain Path: languages/
@@ -59,7 +59,7 @@ class EDD_Campaign_Tracker {
 	 */
 	private function setup_constants() {
 		// Plugin version
-		define( 'EDD_CAMPAIGN_TRACKER_VER', '1.0.1' );
+		define( 'EDD_CAMPAIGN_TRACKER_VER', '1.0.2' );
 
 		// Plugin path
 		define( 'EDD_CAMPAIGN_TRACKER_DIR', plugin_dir_path( __FILE__ ) );
